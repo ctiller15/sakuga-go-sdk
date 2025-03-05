@@ -19,7 +19,6 @@ func TestAPIInitialization(t *testing.T) {
 func TestApiPostList(t *testing.T) {
 	t.Run("Base case happy path", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Create mock response
 			if r.URL.Path == "/post.json" {
 				w.WriteHeader(http.StatusOK)
 				w.Write(postDataResponse)
@@ -77,6 +76,97 @@ func TestApiPostList(t *testing.T) {
 				IsNoteLocked:        false,
 				LastNotedAt:         time.Date(1969, time.December, 31, 19, 0, 0, 0, time.Local),
 				LastCommentedAt:     time.Date(1969, time.December, 31, 19, 0, 0, 0, time.Local),
+			},
+		}
+		assert.Equal(t, expected, response)
+	})
+}
+
+func TestAPITagList(t *testing.T) {
+	t.Run("Happy path - retrieve tags", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/tag.json" {
+				w.WriteHeader(http.StatusOK)
+				w.Write(tagDataResponse)
+			}
+		}))
+		defer server.Close()
+
+		newAPI := NewAPI()
+		newAPI.SetHomeURL(server.URL)
+		opts := TagListOptions{}
+		response, err := newAPI.Tags.List(&opts)
+		assert.Nil(t, err)
+		expected := []TagListResponseResult{
+			{
+				ID:        14391,
+				Name:      "",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        25325,
+				Name:      "(???)",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        25384,
+				Name:      "*",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        22702,
+				Name:      "?",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        24506,
+				Name:      "\\",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        26578,
+				Name:      "]",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        25768,
+				Name:      "_",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        25547,
+				Name:      "0:00/0:46",
+				Count:     0,
+				Type:      0,
+				Ambiguous: false,
+			},
+			{
+				ID:        5620,
+				Name:      "00:08",
+				Count:     5,
+				Type:      3,
+				Ambiguous: false,
+			},
+			{
+				ID:        11330,
+				Name:      "001",
+				Count:     1,
+				Type:      3,
+				Ambiguous: false,
 			},
 		}
 		assert.Equal(t, expected, response)

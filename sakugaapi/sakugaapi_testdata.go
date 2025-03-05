@@ -50,3 +50,78 @@ var postDataResponse = []byte(`
   }
 ]
 `)
+
+var tagDataResponse = []byte(`
+[
+  {
+    "id": 14391,
+    "name": "",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 25325,
+    "name": "(???)",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 25384,
+    "name": "*",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 22702,
+    "name": "?",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 24506,
+    "name": "\\",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 26578,
+    "name": "]",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 25768,
+    "name": "_",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 25547,
+    "name": "0:00/0:46",
+    "count": 0,
+    "type": 0,
+    "ambiguous": false
+  },
+  {
+    "id": 5620,
+    "name": "00:08",
+    "count": 5,
+    "type": 3,
+    "ambiguous": false
+  },
+  {
+    "id": 11330,
+    "name": "001",
+    "count": 1,
+    "type": 3,
+    "ambiguous": false
+  }
+]
+`)
