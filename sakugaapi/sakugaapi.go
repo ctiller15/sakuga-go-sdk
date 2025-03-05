@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"time"
 )
 
 const (
@@ -13,8 +14,8 @@ const (
 type PostListAPIResponseItem struct {
 	ID                  int           `json:"id"`
 	Tags                string        `json:"tags"`
-	CreatedAt           int           `json:"created_at"`
-	UpdatedAt           int           `json:"updated_at"`
+	CreatedAt           int64         `json:"created_at"`
+	UpdatedAt           int64         `json:"updated_at"`
 	CreatorID           int           `json:"creator_id"`
 	ApproverID          int           `json:"approver_id"`
 	Author              string        `json:"author"`
@@ -52,8 +53,109 @@ type PostListAPIResponseItem struct {
 	FramesString        string        `json:"frames_string"`
 	Frames              []interface{} `json:"frames"` // TODO: Accurately define type.
 	IsNoteLocked        bool          `json:"is_note_locked"`
-	LastNotedAt         int           `json:"last_noted_at"`
-	LastCommentedAt     int           `json:"last_commented_at"`
+	LastNotedAt         int64         `json:"last_noted_at"`
+	LastCommentedAt     int64         `json:"last_commented_at"`
+}
+
+type PostListResponseResult struct {
+	ID                  int           `json:"id"`
+	Tags                string        `json:"tags"`
+	CreatedAt           time.Time     `json:"created_at"`
+	UpdatedAt           time.Time     `json:"updated_at"`
+	CreatorID           int           `json:"creator_id"`
+	ApproverID          int           `json:"approver_id"`
+	Author              string        `json:"author"`
+	Change              int           `json:"change"`
+	Source              string        `json:"source"`
+	Score               int           `json:"score"`
+	MD5                 string        `json:"md5"`
+	FileSize            int           `json:"file_size"`
+	FileExtension       string        `json:"file_extension"`
+	FileURL             string        `json:"file_url"`
+	IsShownInIndex      bool          `json:"is_shown_in_index"`
+	PreviewURL          string        `json:"preview_url"`
+	PreviewWidth        int           `json:"preview_width"`
+	ActualPreviewWidth  int           `json:"actual_preview_width"`
+	ActualPreviewHeight int           `json:"actual_preview_height"`
+	SampleURL           string        `json:"sample_url"`
+	SampleWidth         int           `json:"sample_width"`
+	SampleHeight        int           `json:"sample_height"`
+	SampleFileSize      int           `json:"sample_file_size"`
+	JpegURL             string        `json:"jpeg_url"`
+	JpegWidth           int           `json:"jpeg_width"`
+	JpegHeight          int           `json:"jpeg_height"`
+	JpegFileSize        int           `json:"jpeg_file_size"`
+	Rating              string        `json:"rating"`
+	IsRatingLocked      bool          `json:"is_rating_locked"`
+	HasChildren         bool          `json:"has_children"`
+	ParentID            int           `json:"parent_id"`
+	Status              string        `json:"status"`
+	IsPending           bool          `json:"is_pending"`
+	Width               int           `json:"width"`
+	Height              int           `json:"height"`
+	IsHeld              bool          `json:"is_held"`
+	FramesPendingString string        `json:"frames_pending_string"`
+	FramesPending       []interface{} `json:"frames_pending"` // TODO: Accurately define type.
+	FramesString        string        `json:"frames_string"`
+	Frames              []interface{} `json:"frames"` // TODO: Accurately define type.
+	IsNoteLocked        bool          `json:"is_note_locked"`
+	LastNotedAt         time.Time     `json:"last_noted_at"`
+	LastCommentedAt     time.Time     `json:"last_commented_at"`
+}
+
+func mapPostListAPIItemsToResponse(listItems []PostListAPIResponseItem) []PostListResponseResult {
+	postListResponseResults := make([]PostListResponseResult, 0)
+
+	for _, item := range listItems {
+		newResponseResult := PostListResponseResult{
+			ID:                  item.ID,
+			Tags:                item.Tags,
+			CreatedAt:           time.UnixMilli(item.CreatedAt),
+			UpdatedAt:           time.UnixMilli(item.UpdatedAt),
+			CreatorID:           item.CreatorID,
+			ApproverID:          item.ApproverID,
+			Author:              item.Author,
+			Change:              item.Change,
+			Source:              item.Source,
+			MD5:                 item.MD5,
+			FileSize:            item.FileSize,
+			FileExtension:       item.FileExtension,
+			FileURL:             item.FileURL,
+			IsShownInIndex:      item.IsShownInIndex,
+			PreviewURL:          item.PreviewURL,
+			PreviewWidth:        item.PreviewWidth,
+			ActualPreviewWidth:  item.ActualPreviewWidth,
+			ActualPreviewHeight: item.ActualPreviewHeight,
+			SampleURL:           item.SampleURL,
+			SampleWidth:         item.SampleWidth,
+			SampleHeight:        item.SampleHeight,
+			SampleFileSize:      item.SampleFileSize,
+			JpegURL:             item.JpegURL,
+			JpegWidth:           item.JpegWidth,
+			JpegHeight:          item.JpegHeight,
+			JpegFileSize:        item.JpegFileSize,
+			Rating:              item.Rating,
+			IsRatingLocked:      item.IsRatingLocked,
+			HasChildren:         item.HasChildren,
+			ParentID:            item.ParentID,
+			Status:              item.Status,
+			IsPending:           item.IsPending,
+			Width:               item.Width,
+			Height:              item.Height,
+			IsHeld:              item.IsHeld,
+			FramesPendingString: item.FramesPendingString,
+			FramesPending:       item.FramesPending,
+			FramesString:        item.FramesString,
+			Frames:              item.Frames,
+			IsNoteLocked:        item.IsNoteLocked,
+			LastNotedAt:         time.UnixMilli(item.LastNotedAt),
+			LastCommentedAt:     time.UnixMilli(item.LastCommentedAt),
+		}
+
+		postListResponseResults = append(postListResponseResults, newResponseResult)
+	}
+
+	return postListResponseResults
 }
 
 type PostsListOptions struct {
@@ -62,7 +164,7 @@ type PostsListOptions struct {
 	Tags  []string // Tags to search for. Any tag combination will work, including meta-tags
 }
 
-func (p *PostsAPI) List(opts *PostsListOptions) ([]PostListAPIResponseItem, error) {
+func (p *PostsAPI) List(opts *PostsListOptions) ([]PostListResponseResult, error) {
 	var resBody []byte
 
 	res, err := http.Get(p.URL)
@@ -84,7 +186,7 @@ func (p *PostsAPI) List(opts *PostsListOptions) ([]PostListAPIResponseItem, erro
 		return nil, err
 	}
 
-	return postListItems, nil
+	return mapPostListAPIItemsToResponse(postListItems), nil
 	// work out options later.
 	// TODO: Map to a more user-friendly data structure
 }
