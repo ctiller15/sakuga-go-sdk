@@ -172,3 +172,25 @@ func TestAPITagList(t *testing.T) {
 		assert.Equal(t, expected, response)
 	})
 }
+
+func TestApiTagRelated(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/tag/related.json?tags=animated" {
+			w.WriteHeader(http.StatusOK)
+			w.Write(tagDataResponse)
+		}
+	}))
+	defer server.Close()
+
+	t.Run("Happy path - retrieve related tags", func(t *testing.T) {
+
+		newAPI := NewAPI()
+		newAPI.SetHomeURL(server.URL)
+		opts := TagRelatedOptions{
+			Tags: []string{"animated"},
+		}
+		response, err := newAPI.Tags.Related(&opts)
+		assert.Nil(t, err)
+	})
+	t.Errorf("Finish the test!")
+}

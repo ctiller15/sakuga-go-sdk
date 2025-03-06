@@ -185,6 +185,20 @@ func mapTagListAPIItemsToResponse(listItems []TagListAPIResponseItem) []TagListR
 	return tagListResponseResults
 }
 
+const (
+	TagTypeGeneral   string = "general"
+	TagTypeArtist    string = "artist"
+	TagTypeCopyright string = "copyright"
+	TagTypeCharacter string = "character"
+)
+
+var VALID_TAG_TYPES = []string{TagTypeGeneral, TagTypeArtist, TagTypeCopyright, TagTypeCharacter}
+
+type TagRelatedOptions struct {
+	Tags []string // The tag names to query
+	Type string   // Restrict results to this tag type. Can be "general", "artist", "copyright", or "character"
+}
+
 type TagListOptions struct {
 	Limit       int    // How many tags to retrieve. Setting to 0 returns every tag.
 	Page        int    // The page number
@@ -241,6 +255,35 @@ func newPostsAPI(baseURL string) *PostsAPI {
 		URL: baseURL + "/post.json",
 	}
 	return &newAPI
+}
+
+type relatedTagResult [2]string // First value is the tag, second value is the tag ID
+
+func (t *TagsAPI) Related(opts *TagRelatedOptions) (map[string][]relatedTagResult, error) {
+	var resBody []byte
+
+	res, err := http.Get(t.URL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+
+	resBody, err = io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	relatedTagAPIResponse := make(map[string][]relatedTagResult)
+	err = json.Unmarshal(resBody, &relatedTagAPIResponse)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Incorrect. Map to final response body
+	return relatedTagAPIResponse, nil
 }
 
 func (t *TagsAPI) List(opts *TagListOptions) ([]TagListResponseResult, error) {
