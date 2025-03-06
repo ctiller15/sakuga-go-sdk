@@ -7,15 +7,16 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ctiller15/sakuga-go-sdk/sakugaapi"
+	"github.com/ctiller15/sakuga-go-sdk/constants"
+	"github.com/ctiller15/sakuga-go-sdk/models"
 )
 
 var (
 	errInvalidTagOptions = errors.New("invalid options - requires at least one tag argument")
-	errInvalidTagType    = fmt.Errorf("invalid tag type - must be one of %v", sakugaapi.VALID_TAG_TYPES)
+	errInvalidTagType    = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
 )
 
-func createRelatedTagsUrl(baseURL string, opts *sakugaapi.TagRelatedOptions) (string, error) {
+func CreateRelatedTagsUrl(baseURL string, opts *models.TagRelatedOptions) (string, error) {
 	if len(opts.Tags) == 0 {
 		return "", errInvalidTagOptions
 	}
@@ -30,7 +31,7 @@ func createRelatedTagsUrl(baseURL string, opts *sakugaapi.TagRelatedOptions) (st
 	finalURL += "?tags=" + tagsString
 
 	if opts.Type != "" {
-		if !slices.Contains(sakugaapi.VALID_TAG_TYPES, opts.Type) {
+		if !slices.Contains(constants.VALID_TAG_TYPES, opts.Type) {
 			return "", errInvalidTagType
 		}
 

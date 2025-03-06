@@ -4,126 +4,56 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
+
+	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/utils"
 )
 
 const (
 	defaultApiURL = "https://sakugabooru.com"
 )
 
-type TagListAPIResponseItem struct {
-	ID        int    `json:"id"`
-	Name      string `json:"name"`
-	Count     int    `json:"count"`
-	Type      int    `json:"type"`
-	Ambiguous bool   `json:"ambiguous"`
+func mapTagRelatedAPIResultToResponse(tagAPIResult map[string][]relatedTagResult) (map[string][]models.RelatedTagResponse, error) {
+	response := make(map[string][]models.RelatedTagResponse)
+
+	for k, v := range tagAPIResult {
+		newResult := make([]models.RelatedTagResponse, 0)
+
+		for _, tagResult := range v {
+			var ID int
+
+			switch v := tagResult[1].(type) {
+			case int:
+				ID = v
+			case string:
+				convID, err := strconv.Atoi(v)
+				if err != nil {
+					return nil, err
+				}
+
+				ID = convID
+			}
+
+			newTagResponse := models.RelatedTagResponse{
+				Name: tagResult[0].(string),
+				ID:   ID,
+			}
+			newResult = append(newResult, newTagResponse)
+		}
+
+		response[k] = newResult
+	}
+
+	return response, nil
 }
 
-type TagListResponseResult struct {
-	ID        int
-	Name      string
-	Count     int
-	Type      int
-	Ambiguous bool
-}
-
-type PostListAPIResponseItem struct {
-	ID                  int           `json:"id"`
-	Tags                string        `json:"tags"`
-	CreatedAt           int64         `json:"created_at"`
-	UpdatedAt           int64         `json:"updated_at"`
-	CreatorID           int           `json:"creator_id"`
-	ApproverID          int           `json:"approver_id"`
-	Author              string        `json:"author"`
-	Change              int           `json:"change"`
-	Source              string        `json:"source"`
-	Score               int           `json:"score"`
-	MD5                 string        `json:"md5"`
-	FileSize            int           `json:"file_size"`
-	FileExtension       string        `json:"file_extension"`
-	FileURL             string        `json:"file_url"`
-	IsShownInIndex      bool          `json:"is_shown_in_index"`
-	PreviewURL          string        `json:"preview_url"`
-	PreviewWidth        int           `json:"preview_width"`
-	ActualPreviewWidth  int           `json:"actual_preview_width"`
-	ActualPreviewHeight int           `json:"actual_preview_height"`
-	SampleURL           string        `json:"sample_url"`
-	SampleWidth         int           `json:"sample_width"`
-	SampleHeight        int           `json:"sample_height"`
-	SampleFileSize      int           `json:"sample_file_size"`
-	JpegURL             string        `json:"jpeg_url"`
-	JpegWidth           int           `json:"jpeg_width"`
-	JpegHeight          int           `json:"jpeg_height"`
-	JpegFileSize        int           `json:"jpeg_file_size"`
-	Rating              string        `json:"rating"`
-	IsRatingLocked      bool          `json:"is_rating_locked"`
-	HasChildren         bool          `json:"has_children"`
-	ParentID            int           `json:"parent_id"`
-	Status              string        `json:"status"`
-	IsPending           bool          `json:"is_pending"`
-	Width               int           `json:"width"`
-	Height              int           `json:"height"`
-	IsHeld              bool          `json:"is_held"`
-	FramesPendingString string        `json:"frames_pending_string"`
-	FramesPending       []interface{} `json:"frames_pending"` // TODO: Accurately define type.
-	FramesString        string        `json:"frames_string"`
-	Frames              []interface{} `json:"frames"` // TODO: Accurately define type.
-	IsNoteLocked        bool          `json:"is_note_locked"`
-	LastNotedAt         int64         `json:"last_noted_at"`
-	LastCommentedAt     int64         `json:"last_commented_at"`
-}
-
-type PostListResponseResult struct {
-	ID                  int
-	Tags                string
-	CreatedAt           time.Time
-	UpdatedAt           time.Time
-	CreatorID           int
-	ApproverID          int
-	Author              string
-	Change              int
-	Source              string
-	Score               int
-	MD5                 string
-	FileSize            int
-	FileExtension       string
-	FileURL             string
-	IsShownInIndex      bool
-	PreviewURL          string
-	PreviewWidth        int
-	ActualPreviewWidth  int
-	ActualPreviewHeight int
-	SampleURL           string
-	SampleWidth         int
-	SampleHeight        int
-	SampleFileSize      int
-	JpegURL             string
-	JpegWidth           int
-	JpegHeight          int
-	JpegFileSize        int
-	Rating              string
-	IsRatingLocked      bool
-	HasChildren         bool
-	ParentID            int
-	Status              string
-	IsPending           bool
-	Width               int
-	Height              int
-	IsHeld              bool
-	FramesPendingString string
-	FramesPending       []interface{}
-	FramesString        string
-	Frames              []interface{}
-	IsNoteLocked        bool
-	LastNotedAt         time.Time
-	LastCommentedAt     time.Time
-}
-
-func mapPostListAPIItemsToResponse(listItems []PostListAPIResponseItem) []PostListResponseResult {
-	postListResponseResults := make([]PostListResponseResult, 0)
+func mapPostListAPIItemsToResponse(listItems []models.PostListAPIResponseItem) []models.PostListResponseResult {
+	postListResponseResults := make([]models.PostListResponseResult, 0)
 
 	for _, item := range listItems {
-		newResponseResult := PostListResponseResult{
+		newResponseResult := models.PostListResponseResult{
 			ID:                  item.ID,
 			Tags:                item.Tags,
 			CreatedAt:           time.UnixMilli(item.CreatedAt),
@@ -174,48 +104,18 @@ func mapPostListAPIItemsToResponse(listItems []PostListAPIResponseItem) []PostLi
 	return postListResponseResults
 }
 
-func mapTagListAPIItemsToResponse(listItems []TagListAPIResponseItem) []TagListResponseResult {
-	tagListResponseResults := make([]TagListResponseResult, 0)
+func mapTagListAPIItemsToResponse(listItems []models.TagListAPIResponseItem) []models.TagListResponseResult {
+	tagListResponseResults := make([]models.TagListResponseResult, 0)
 
 	for _, item := range listItems {
-		newItem := TagListResponseResult(item)
+		newItem := models.TagListResponseResult(item)
 		tagListResponseResults = append(tagListResponseResults, newItem)
 	}
 
 	return tagListResponseResults
 }
 
-const (
-	TagTypeGeneral   string = "general"
-	TagTypeArtist    string = "artist"
-	TagTypeCopyright string = "copyright"
-	TagTypeCharacter string = "character"
-)
-
-var VALID_TAG_TYPES = []string{TagTypeGeneral, TagTypeArtist, TagTypeCopyright, TagTypeCharacter}
-
-type TagRelatedOptions struct {
-	Tags []string // The tag names to query
-	Type string   // Restrict results to this tag type. Can be "general", "artist", "copyright", or "character"
-}
-
-type TagListOptions struct {
-	Limit       int    // How many tags to retrieve. Setting to 0 returns every tag.
-	Page        int    // The page number
-	Order       string // can be date, count, or name
-	ID          int    // The ID number of the tag
-	AfterID     int    // Return all tags with an id number greater than this.
-	Name        string // The exact name of the tag
-	NamePattern string // Search for any tag that has this parameter in its name
-}
-
-type PostsListOptions struct {
-	Limit int      // How many posts you want to retrieve. Hard limit of 100 per request
-	Page  int      // The page number. It starts at 1.
-	Tags  []string // Tags to search for. Any tag combination will work, including meta-tags
-}
-
-func (p *PostsAPI) List(opts *PostsListOptions) ([]PostListResponseResult, error) {
+func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListResponseResult, error) {
 	var resBody []byte
 
 	res, err := http.Get(p.URL)
@@ -230,7 +130,7 @@ func (p *PostsAPI) List(opts *PostsListOptions) ([]PostListResponseResult, error
 		return nil, err
 	}
 
-	postListItems := make([]PostListAPIResponseItem, 0)
+	postListItems := make([]models.PostListAPIResponseItem, 0)
 	err = json.Unmarshal(resBody, &postListItems)
 
 	if err != nil {
@@ -257,12 +157,14 @@ func newPostsAPI(baseURL string) *PostsAPI {
 	return &newAPI
 }
 
-type relatedTagResult [2]string // First value is the tag, second value is the tag ID
+type relatedTagResult [2]interface{} // First value is the tag - str, second value is the tag ID - int
 
-func (t *TagsAPI) Related(opts *TagRelatedOptions) (map[string][]relatedTagResult, error) {
+func (t *TagsAPI) Related(opts *models.TagRelatedOptions) (map[string][]models.RelatedTagResponse, error) {
+	url, err := utils.CreateRelatedTagsUrl(t.URL, opts)
+
 	var resBody []byte
 
-	res, err := http.Get(t.URL)
+	res, err := http.Get(url)
 
 	if err != nil {
 		return nil, err
@@ -283,13 +185,19 @@ func (t *TagsAPI) Related(opts *TagRelatedOptions) (map[string][]relatedTagResul
 	}
 
 	// Incorrect. Map to final response body
-	return relatedTagAPIResponse, nil
+	mappedResponse, err := mapTagRelatedAPIResultToResponse(relatedTagAPIResponse)
+	if err != nil {
+		return nil, err
+	}
+	return mappedResponse, nil
 }
 
-func (t *TagsAPI) List(opts *TagListOptions) ([]TagListResponseResult, error) {
+func (t *TagsAPI) List(opts *models.TagListOptions) ([]models.TagListResponseResult, error) {
 	var resBody []byte
 
-	res, err := http.Get(t.URL)
+	url := t.URL + ".json"
+
+	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -301,7 +209,7 @@ func (t *TagsAPI) List(opts *TagListOptions) ([]TagListResponseResult, error) {
 		return nil, err
 	}
 
-	tagListItems := make([]TagListAPIResponseItem, 0)
+	tagListItems := make([]models.TagListAPIResponseItem, 0)
 	err = json.Unmarshal(resBody, &tagListItems)
 
 	if err != nil {
@@ -314,7 +222,7 @@ func (t *TagsAPI) List(opts *TagListOptions) ([]TagListResponseResult, error) {
 
 func newTagsAPI(baseURL string) *TagsAPI {
 	newAPI := TagsAPI{
-		URL: baseURL + "/tag.json",
+		URL: baseURL + "/tag",
 	}
 	return &newAPI
 }
