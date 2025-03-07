@@ -142,6 +142,10 @@ func mapCommentShowAPIItemToResponse(item models.CommentShowAPIResultItem) (mode
 	}, nil
 }
 
+// TODO: Add a "random" endpoint.
+// Can query with a style similar to the following:
+// https://sakugabooru.com/post.json?tags=order%3Arandom&limit=1
+
 func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListResponseResult, error) {
 	url := p.URL + ".json"
 	body, err := utils.Fetch(url)
