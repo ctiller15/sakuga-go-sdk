@@ -476,3 +476,5 @@ type FavoriteListUsersAPIResult struct {
 type FavoriteListUsersAPIResponse struct {
 	FavoritedUsers []string
 }
+
+type RelatedTagResult [2]interface{} // First value is the tag - str, second value is the tag ID - int
