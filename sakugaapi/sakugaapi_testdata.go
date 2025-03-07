@@ -231,3 +231,203 @@ var tagDataRelatedResponse = []byte(
     ]
   ]
 }`)
+
+var artistDataListResponse = []byte(`
+	[
+		{
+			"id": 1172,
+			"name": "심땅",
+			"alias_id": 1171,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1166,
+			"name": "장석민",
+			"alias_id": 1165,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1170,
+			"name": "파랑상자",
+			"alias_id": 1169,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 647,
+			"name": ".",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 672,
+			"name": ">",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 593,
+			"name": "0nepeach",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1053,
+			"name": "666ban",
+			"alias_id": 1052,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1192,
+			"name": "abegen",
+			"alias_id": 1191,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1068,
+			"name": "adam_zheng",
+			"alias_id": 1066,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 651,
+			"name": "aida_saakian",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 531,
+			"name": "aimkid",
+			"alias_id": null,
+			"group_id": null,
+			"urls": [
+			"https://twitter.com/aimkidblast"
+			]
+		},
+		{
+			"id": 997,
+			"name": "aimman_ibrahim",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1027,
+			"name": "aiowaruru",
+			"alias_id": 616,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 799,
+			"name": "aito_ohashi",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 1189,
+			"name": "akapape",
+			"alias_id": 811,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 782,
+			"name": "akari_ranzaki",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 871,
+			"name": "aki_deguchi",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 559,
+			"name": "akihiro_ota",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 970,
+			"name": "akiko_kudo",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 505,
+			"name": "akio_watanabe",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 811,
+			"name": "akira_hamaguchi",
+			"alias_id": null,
+			"group_id": null,
+			"urls": [
+			"https://x.com/oyasirazumonai",
+			"https://x.com/akapape"
+			]
+		},
+		{
+			"id": 753,
+			"name": "akira_kikuchi",
+			"alias_id": null,
+			"group_id": null,
+			"urls": [
+			"https://www.animenewsnetwork.com/encyclopedia/people.php?id=19539",
+			"https://w.atwiki.jp/sakuga/pages/1138.amp",
+			"https://w.atwiki.jp/anime_wiki/pages/6287.amp"
+			]
+		},
+		{
+			"id": 136,
+			"name": "akira_takata",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 911,
+			"name": "akira_tanaka",
+			"alias_id": 910,
+			"group_id": null,
+			"urls": []
+		},
+		{
+			"id": 975,
+			"name": "ako_no_akio",
+			"alias_id": null,
+			"group_id": null,
+			"urls": []
+		}
+	]
+`)
+
+var commentDataShowResponse = []byte(`
+{
+  "id": 90003,
+  "created_at": "2023-12-26T20:52:33.419Z",
+  "post_id": 107257,
+  "creator": "Ivorybacon",
+  "creator_id": 12904,
+  "body": "I'm tempted to say that Otsuka is here given some of the smears on dispay. 0:05 and 0:11 for instance appear to have those very jagged smear lines that she seems to do often. (post #217312) and (post #215778) for comparison.\r\n\r\nShe's listed as an AD on this episode so there's a chance that it might just be a correction on her part."
+}
+`)

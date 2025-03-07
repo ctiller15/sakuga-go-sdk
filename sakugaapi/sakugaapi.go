@@ -2,8 +2,6 @@ package sakugaapi
 
 import (
 	"encoding/json"
-	"io"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -115,23 +113,44 @@ func mapTagListAPIItemsToResponse(listItems []models.TagListAPIResponseItem) []m
 	return tagListResponseResults
 }
 
-func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListResponseResult, error) {
-	var resBody []byte
+func mapArtistListAPIItemsToResponse(listItems []models.ArtistListAPIResultItem) []models.ArtistListAPIResponseItem {
+	artistListResponseResults := make([]models.ArtistListAPIResponseItem, 0)
 
-	res, err := http.Get(p.URL)
-	if err != nil {
-		return nil, err
+	for _, item := range listItems {
+		newItem := models.ArtistListAPIResponseItem(item)
+		artistListResponseResults = append(artistListResponseResults, newItem)
 	}
 
-	defer res.Body.Close()
+	return artistListResponseResults
+}
 
-	resBody, err = io.ReadAll(res.Body)
+func mapCommentShowAPIItemToResponse(item models.CommentShowAPIResultItem) (models.CommentShowResponseItem, error) {
+	// Apparently the format is ISO 8601, but this is working for now so I'm happy.
+	//https://stackoverflow.com/questions/522251/whats-the-difference-between-iso-8601-and-rfc-3339-date-formats
+	parsedTime, err := time.Parse(time.RFC3339, item.CreatedAt)
+	if err != nil {
+		return models.CommentShowResponseItem{}, err
+	}
+
+	return models.CommentShowResponseItem{
+		ID:        item.ID,
+		CreatedAt: parsedTime,
+		PostID:    item.PostID,
+		Creator:   item.Creator,
+		CreatorID: item.CreatorID,
+		Body:      item.Body,
+	}, nil
+}
+
+func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListResponseResult, error) {
+	url := p.URL + ".json"
+	body, err := utils.Fetch(url)
 	if err != nil {
 		return nil, err
 	}
 
 	postListItems := make([]models.PostListAPIResponseItem, 0)
-	err = json.Unmarshal(resBody, &postListItems)
+	err = json.Unmarshal(body, &postListItems)
 
 	if err != nil {
 		return nil, err
@@ -150,9 +169,17 @@ type TagsAPI struct {
 	URL string
 }
 
+type ArtistsAPI struct {
+	URL string
+}
+
+type CommentsAPI struct {
+	URL string
+}
+
 func newPostsAPI(baseURL string) *PostsAPI {
 	newAPI := PostsAPI{
-		URL: baseURL + "/post.json",
+		URL: baseURL + "/post",
 	}
 	return &newAPI
 }
@@ -162,23 +189,13 @@ type relatedTagResult [2]interface{} // First value is the tag - str, second val
 func (t *TagsAPI) Related(opts *models.TagRelatedOptions) (map[string][]models.RelatedTagResponse, error) {
 	url, err := utils.CreateRelatedTagsUrl(t.URL, opts)
 
-	var resBody []byte
-
-	res, err := http.Get(url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer res.Body.Close()
-
-	resBody, err = io.ReadAll(res.Body)
+	body, err := utils.Fetch(url)
 	if err != nil {
 		return nil, err
 	}
 
 	relatedTagAPIResponse := make(map[string][]relatedTagResult)
-	err = json.Unmarshal(resBody, &relatedTagAPIResponse)
+	err = json.Unmarshal(body, &relatedTagAPIResponse)
 
 	if err != nil {
 		return nil, err
@@ -193,24 +210,16 @@ func (t *TagsAPI) Related(opts *models.TagRelatedOptions) (map[string][]models.R
 }
 
 func (t *TagsAPI) List(opts *models.TagListOptions) ([]models.TagListResponseResult, error) {
-	var resBody []byte
-
 	url := t.URL + ".json"
 
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
+	body, err := utils.Fetch(url)
 
-	defer res.Body.Close()
-
-	resBody, err = io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	tagListItems := make([]models.TagListAPIResponseItem, 0)
-	err = json.Unmarshal(resBody, &tagListItems)
+	err = json.Unmarshal(body, &tagListItems)
 
 	if err != nil {
 		return nil, err
@@ -220,6 +229,52 @@ func (t *TagsAPI) List(opts *models.TagListOptions) ([]models.TagListResponseRes
 	// work out options later.
 }
 
+func (a *ArtistsAPI) List(opts *models.ArtistListOptions) ([]models.ArtistListAPIResponseItem, error) {
+	url := a.URL + ".json"
+
+	body, err := utils.Fetch(url)
+
+	if err != nil {
+		return nil, err
+	}
+
+	artistListItems := make([]models.ArtistListAPIResultItem, 0)
+	err = json.Unmarshal(body, &artistListItems)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return mapArtistListAPIItemsToResponse(artistListItems), nil
+}
+
+func (c *CommentsAPI) Show(opts *models.CommentShowOptions) (models.CommentShowResponseItem, error) {
+	url, err := utils.CreateCommentShowUrl(c.URL, opts)
+	if err != nil {
+		return models.CommentShowResponseItem{}, err
+	}
+
+	body, err := utils.Fetch(url)
+
+	if err != nil {
+		return models.CommentShowResponseItem{}, err
+	}
+
+	commentShowItem := models.CommentShowAPIResultItem{}
+	err = json.Unmarshal(body, &commentShowItem)
+
+	if err != nil {
+		return models.CommentShowResponseItem{}, err
+	}
+
+	commentShowResponse, err := mapCommentShowAPIItemToResponse(commentShowItem)
+	if err != nil {
+		return models.CommentShowResponseItem{}, err
+	}
+
+	return commentShowResponse, nil
+}
+
 func newTagsAPI(baseURL string) *TagsAPI {
 	newAPI := TagsAPI{
 		URL: baseURL + "/tag",
@@ -227,20 +282,38 @@ func newTagsAPI(baseURL string) *TagsAPI {
 	return &newAPI
 }
 
+func newArtistsAPI(baseURL string) *ArtistsAPI {
+	newAPI := ArtistsAPI{
+		URL: baseURL + "/artist",
+	}
+	return &newAPI
+}
+
+func newCommentsAPI(baseURL string) *CommentsAPI {
+	newAPI := CommentsAPI{
+		URL: baseURL + "/comment",
+	}
+	return &newAPI
+}
+
 // The SakugaAPI struct contains the structs for all of the methods
 // as documented in the API.
 type SakugaAPI struct {
-	Posts *PostsAPI
-	Tags  *TagsAPI
-	URL   string
+	Posts    *PostsAPI
+	Tags     *TagsAPI
+	Artists  *ArtistsAPI
+	Comments *CommentsAPI
+	URL      string
 }
 
 // Initializes a new SakugaAPI and all of its child structs
 func NewAPI() *SakugaAPI {
 	newAPI := SakugaAPI{
-		Posts: newPostsAPI(defaultApiURL),
-		Tags:  newTagsAPI(defaultApiURL),
-		URL:   defaultApiURL,
+		Posts:    newPostsAPI(defaultApiURL),
+		Tags:     newTagsAPI(defaultApiURL),
+		Artists:  newArtistsAPI(defaultApiURL),
+		Comments: newCommentsAPI(defaultApiURL),
+		URL:      defaultApiURL,
 	}
 
 	return &newAPI
@@ -249,5 +322,7 @@ func NewAPI() *SakugaAPI {
 func (s *SakugaAPI) SetHomeURL(newURL string) {
 	s.Posts = newPostsAPI(newURL)
 	s.Tags = newTagsAPI(newURL)
+	s.Artists = newArtistsAPI(newURL)
+	s.Comments = newCommentsAPI(newURL)
 	s.URL = newURL
 }

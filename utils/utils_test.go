@@ -67,3 +67,28 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 		assert.Equal(t, expected, result)
 	})
 }
+
+func TestCommentShowURLCreation(t *testing.T) {
+	t.Run("Fails to create url if ID is not provided", func(t *testing.T) {
+		baseURL := "https://sakurabooru.com/comment/"
+
+		options := models.CommentShowOptions{}
+
+		_, err := CreateCommentShowUrl(baseURL, &options)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, errInvalidCommentOptions)
+	})
+
+	t.Run("Successfully creates url if ID is provided", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/comment/"
+
+		options := models.CommentShowOptions{
+			ID: 90003,
+		}
+
+		result, err := CreateCommentShowUrl(baseURL, &options)
+		assert.Nil(t, err)
+		expected := "https://sakugabooru.com/comment/show.json?id=90003"
+		assert.Equal(t, expected, result)
+	})
+}

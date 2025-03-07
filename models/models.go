@@ -135,3 +135,50 @@ type PostsListOptions struct {
 	Page  int      // The page number. It starts at 1.
 	Tags  []string // Tags to search for. Any tag combination will work, including meta-tags
 }
+
+type ArtistListOptions struct {
+	Name  string // The name or name fragment of the artist
+	Order string // Can be date or name
+	Page  int    // The Page number
+}
+
+type ArtistListAPIResultItem struct {
+	ID      int      `json:"id"`
+	Name    string   `json:"name"`
+	AliasID int      `json:"alias_id"`
+	GroupID int      `json:"group_id"`
+	Urls    []string `json:"urls"`
+}
+
+// TODO: figure out how to handle nullable values.
+// For integers/ids we can likely return a -1 value as an indicator
+
+type ArtistListAPIResponseItem struct {
+	ID      int
+	Name    string
+	AliasID int
+	GroupID int
+	Urls    []string
+}
+
+type CommentShowOptions struct {
+	ID int // The ID of the comment to show. Required.
+}
+
+type CommentShowAPIResultItem struct {
+	ID        int    `json:"id"`
+	CreatedAt string `json:"created_at"`
+	PostID    int    `json:"post_id"`
+	Creator   string `json:"creator"`
+	CreatorID int    `json:"creator_id"`
+	Body      string `json:"body"`
+}
+
+type CommentShowResponseItem struct {
+	ID        int
+	CreatedAt time.Time
+	PostID    int
+	Creator   string
+	CreatorID int
+	Body      string
+}

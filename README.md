@@ -1,6 +1,6 @@
 # sakuga-go-sdk
 
-A go SDK for the [Sakugabooru API](https://sakugabooru.com/help/api)
+An unofficial go SDK for the [Sakugabooru API](https://sakugabooru.com/help/api)
 
 Currently supported api calls:
 
