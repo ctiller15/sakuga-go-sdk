@@ -15,6 +15,7 @@ import (
 )
 
 var (
+	errInvalidPostOptions    = errors.New("invalid options - request limit must be between 1 and 100, page must be at least 1")
 	errInvalidTagOptions     = errors.New("invalid options - requires at least one tag argument")
 	errInvalidTagType        = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
 	errInvalidCommentOptions = errors.New("invalid options - id must be set")
@@ -49,6 +50,39 @@ func Fetch(url string) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func CreatePostsListUrl(baseURL string, opts *models.PostsListOptions) (string, error) {
+	// 0 is the default value. If we see that we ignore that query entirely.
+	if opts.Limit != 0 && (opts.Limit > 100 || opts.Limit < 1) {
+		return "", errInvalidPostOptions
+	}
+
+	if opts.Page != 0 && opts.Page < 1 {
+		return "", errInvalidPostOptions
+	}
+
+	finalURL := baseURL + ".json"
+
+	queryStringParams := make([]string, 0)
+
+	if opts.Limit != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("limit=%d", opts.Limit))
+	}
+
+	if opts.Page != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
+	}
+
+	if len(opts.Tags) > 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("tags=%s", strings.Join(opts.Tags, " ")))
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
+	}
+
+	return finalURL, nil
 }
 
 func CreateRelatedTagsUrl(baseURL string, opts *models.TagRelatedOptions) (string, error) {
