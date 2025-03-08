@@ -17,6 +17,7 @@ import (
 var (
 	errInvalidPostOptions    = errors.New("invalid options - request limit must be between 1 and 100, page must be at least 1")
 	errInvalidTagOptions     = errors.New("invalid options - requires at least one tag argument")
+	errInvalidListTagOptions = errors.New("invalid tag options")
 	errInvalidTagType        = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
 	errInvalidCommentOptions = errors.New("invalid options - id must be set")
 )
@@ -76,6 +77,57 @@ func CreatePostsListUrl(baseURL string, opts *models.PostsListOptions) (string, 
 
 	if len(opts.Tags) > 0 {
 		queryStringParams = append(queryStringParams, fmt.Sprintf("tags=%s", strings.Join(opts.Tags, " ")))
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
+	}
+
+	return finalURL, nil
+}
+
+func CreateListTagsUrl(baseURL string, opts *models.TagListOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	if opts.Limit != 0 && opts.Limit > 1000 {
+		return "", errInvalidListTagOptions
+	}
+
+	// TODO: investigate if random is supported for tag list
+	// TODO: add support for descending variations
+	if opts.Order != "" && !slices.Contains(models.TagListOrderOptions, opts.Order) {
+		return "", errInvalidListTagOptions
+	}
+
+	queryStringParams := make([]string, 0)
+
+	// It may be worth building a generic builder for these params.
+	if opts.Limit != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("limit=%d", opts.Limit))
+	}
+
+	if opts.Page != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
+	}
+
+	if opts.Order != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("order=%s", opts.Order))
+	}
+
+	if opts.ID != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("id=%d", opts.ID))
+	}
+
+	if opts.AfterID != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("after_id=%d", opts.AfterID))
+	}
+
+	if opts.Name != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("name=%s", opts.Name))
+	}
+
+	if opts.NamePattern != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("name_pattern=%s", opts.NamePattern))
 	}
 
 	if len(queryStringParams) > 0 {

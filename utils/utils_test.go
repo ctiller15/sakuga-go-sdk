@@ -172,9 +172,136 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 }
 
+func TestTagsListURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json")
+	})
+
+	t.Run("errors if limit is above 1000", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Limit: 50000,
+		}
+
+		_, err := CreateListTagsUrl(baseURL, &options)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, errInvalidListTagOptions)
+	})
+
+	t.Run("errors if order is not date, count, or name", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Order: "invalid",
+		}
+
+		_, err := CreateListTagsUrl(baseURL, &options)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, errInvalidListTagOptions)
+	})
+
+	t.Run("limit", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Limit: 5,
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?limit=5")
+	})
+
+	t.Run("page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Page: 5,
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?page=5")
+	})
+
+	t.Run("order", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Order: models.TagListOrderOptionDate,
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?order=date")
+	})
+
+	t.Run("id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			ID: 25325,
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?id=25325")
+	})
+
+	t.Run("after_id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			AfterID: 25000,
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?after_id=25000")
+	})
+
+	t.Run("name", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Name: "effects",
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?name=effects")
+	})
+
+	t.Run("name_pattern", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			NamePattern: "abcd",
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?name_pattern=abcd")
+	})
+
+	t.Run("combination of all options", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/tag"
+		options := models.TagListOptions{
+			Page:        1,
+			Limit:       5,
+			Order:       models.TagListOrderOptionDate,
+			ID:          26964,
+			AfterID:     25000,
+			Name:        "miyagawa",
+			NamePattern: "o_m",
+		}
+
+		response, err := CreateListTagsUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, response, "https://sakugabooru.com/tag.json?limit=5&page=1&order=date&id=26964&after_id=25000&name=miyagawa&name_pattern=o_m")
+	})
+}
+
 func TestRelatedTagsURLCreation(t *testing.T) {
 	t.Run("errors if no tag has been submitted", func(t *testing.T) {
-		baseURL := "https://sakugabooru.com/tag/"
+		baseURL := "https://sakugabooru.com/tag"
 		options := models.TagRelatedOptions{}
 
 		_, err := CreateRelatedTagsUrl(baseURL, &options)
@@ -183,7 +310,7 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 	})
 
 	t.Run("errors if an invalid tag type has been provided", func(t *testing.T) {
-		baseURL := "https://sakugabooru.com/tag/"
+		baseURL := "https://sakugabooru.com/tag"
 		options := models.TagRelatedOptions{
 			Tags: []string{"animated"},
 			Type: "invalid",
