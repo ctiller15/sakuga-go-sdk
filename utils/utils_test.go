@@ -531,3 +531,25 @@ func TestWikiListURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/wiki.json?order=date&limit=2&page=2&query=Background")
 	})
 }
+
+func TestNotesListURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteListOptions{}
+
+		result, err := CreateNoteListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note.json")
+	})
+
+	t.Run("postID", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteListOptions{
+			PostID: 251595,
+		}
+
+		result, err := CreateNoteListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note.json?post_id=251595")
+	})
+}

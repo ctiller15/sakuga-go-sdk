@@ -240,3 +240,12 @@ func CreateWikiListUrl(baseURL string, opts *models.WikiListOptions) (string, er
 
 	return finalURL, nil
 }
+
+func CreateNoteListUrl(baseURL string, opts *models.NoteListOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	if opts.PostID != 0 {
+		finalURL += fmt.Sprintf("?post_id=%d", opts.PostID)
+	}
+	return finalURL, nil
+}
