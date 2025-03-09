@@ -2,6 +2,13 @@ package models
 
 import "time"
 
+const (
+	WikiListOrderOptionTitle = "title"
+	WikiListOrderOptionDate  = "date"
+)
+
+var WikiListOrderOptions = []string{WikiListOrderOptionTitle, WikiListOrderOptionDate}
+
 type WikiListOptions struct {
 	Order string // How you want pages to be ordered. Can be `title` or `date`.
 	Limit int    // The number of pages to retrieve

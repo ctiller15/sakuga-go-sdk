@@ -21,6 +21,7 @@ var (
 	errInvalidTagType        = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
 	errInvalidCommentOptions = errors.New("invalid options - id must be set")
 	errInvalidArtistOptions  = errors.New("invalid options for artist request")
+	errInvalidWikiOptions    = errors.New("invalid options for wiki")
 )
 
 func Fetch(url string) ([]byte, error) {
@@ -203,6 +204,39 @@ func CreateCommentShowUrl(baseURL string, opts *models.CommentShowOptions) (stri
 	}
 
 	finalURL += "?id=" + strconv.Itoa(opts.ID)
+
+	return finalURL, nil
+}
+
+func CreateWikiListUrl(baseURL string, opts *models.WikiListOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	if opts.Order != "" && !slices.Contains(models.WikiListOrderOptions, opts.Order) {
+		return "", errInvalidWikiOptions
+	}
+
+	queryStringParams := make([]string, 0)
+
+	if opts.Order != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("order=%s", opts.Order))
+	}
+
+	if opts.Limit != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("limit=%d", opts.Limit))
+	}
+
+	if opts.Page != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
+	}
+
+	if opts.Query != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("query=%s", opts.Query))
+
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
+	}
 
 	return finalURL, nil
 }

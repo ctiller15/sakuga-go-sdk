@@ -451,3 +451,83 @@ func TestCommentShowURLCreation(t *testing.T) {
 		assert.Equal(t, expected, result)
 	})
 }
+
+func TestWikiListURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{}
+
+		result, err := CreateWikiListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/wiki.json")
+	})
+
+	t.Run("order limited to title and date", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{
+			Order: "invalid",
+		}
+
+		_, err := CreateWikiListUrl(baseURL, &options)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, errInvalidWikiOptions)
+	})
+
+	t.Run("order", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{
+			Order: models.WikiListOrderOptionDate,
+		}
+
+		result, err := CreateWikiListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/wiki.json?order=date")
+	})
+
+	t.Run("limit", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{
+			Limit: 50,
+		}
+
+		result, err := CreateWikiListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/wiki.json?limit=50")
+	})
+
+	t.Run("page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{
+			Page: 5,
+		}
+
+		result, err := CreateWikiListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/wiki.json?page=5")
+	})
+
+	t.Run("query", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{
+			Query: "Background",
+		}
+
+		result, err := CreateWikiListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/wiki.json?query=Background")
+	})
+
+	t.Run("all parameters", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/wiki"
+		options := models.WikiListOptions{
+			Order: models.WikiListOrderOptionDate,
+			Limit: 2,
+			Page:  2,
+			Query: "Background",
+		}
+
+		result, err := CreateWikiListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/wiki.json?order=date&limit=2&page=2&query=Background")
+	})
+}
