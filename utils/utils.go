@@ -20,6 +20,7 @@ var (
 	errInvalidListTagOptions = errors.New("invalid tag options")
 	errInvalidTagType        = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
 	errInvalidCommentOptions = errors.New("invalid options - id must be set")
+	errInvalidArtistOptions  = errors.New("invalid options for artist request")
 )
 
 func Fetch(url string) ([]byte, error) {
@@ -157,6 +158,34 @@ func CreateRelatedTagsUrl(baseURL string, opts *models.TagRelatedOptions) (strin
 		}
 
 		finalURL += "&type=" + opts.Type
+	}
+
+	return finalURL, nil
+}
+
+func CreateArtistsListUrl(baseURL string, opts *models.ArtistListOptions) (string, error) {
+	if opts.Order != "" && !slices.Contains(models.ValidArtistListOrderOptions, opts.Order) {
+		return "", errInvalidArtistOptions
+	}
+
+	finalURL := baseURL + ".json"
+
+	queryStringParams := make([]string, 0)
+
+	if opts.Name != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("name=%s", opts.Name))
+	}
+
+	if opts.Page != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
+	}
+
+	if opts.Order != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("order=%s", opts.Order))
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
 	}
 
 	return finalURL, nil

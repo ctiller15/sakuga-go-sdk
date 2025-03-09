@@ -1,5 +1,12 @@
 package models
 
+const (
+	ArtistListOrderDateOption = "date"
+	ArtistListOrderNameOption = "name"
+)
+
+var ValidArtistListOrderOptions = []string{ArtistListOrderDateOption, ArtistListOrderNameOption}
+
 type ArtistListOptions struct {
 	Name  string // The name or name fragment of the artist
 	Order string // Can be date or name

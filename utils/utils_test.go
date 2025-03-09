@@ -358,7 +358,75 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 		assert.Equal(t, expected, result)
 	})
 }
+func TestArtistsListURLCreation(t *testing.T) {
+	t.Run("base case, generate url without options", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/artist"
+		options := models.ArtistListOptions{}
 
+		result, err := CreateArtistsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		expected := "https://sakugabooru.com/artist.json"
+		assert.Equal(t, expected, result)
+	})
+
+	t.Run("errors if order is not date or name", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/artist"
+		options := models.ArtistListOptions{
+			Order: "invalid",
+		}
+
+		_, err := CreateArtistsListUrl(baseURL, &options)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, errInvalidArtistOptions)
+	})
+
+	t.Run("name", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/artist"
+		options := models.ArtistListOptions{
+			Name: "oda_eiichiro",
+		}
+
+		result, err := CreateArtistsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/artist.json?name=oda_eiichiro")
+	})
+
+	t.Run("order", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/artist"
+		options := models.ArtistListOptions{
+			Order: models.ArtistListOrderNameOption,
+		}
+
+		result, err := CreateArtistsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/artist.json?order=name")
+	})
+
+	t.Run("page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/artist"
+		options := models.ArtistListOptions{
+			Page: 5,
+		}
+
+		result, err := CreateArtistsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/artist.json?page=5")
+
+	})
+
+	t.Run("name, order, and page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/artist"
+		options := models.ArtistListOptions{
+			Name:  "a",
+			Order: models.ArtistListOrderNameOption,
+			Page:  2,
+		}
+
+		result, err := CreateArtistsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/artist.json?name=a&page=2&order=name")
+	})
+}
 func TestCommentShowURLCreation(t *testing.T) {
 	t.Run("Fails to create url if ID is not provided", func(t *testing.T) {
 		baseURL := "https://sakurabooru.com/comment/"
