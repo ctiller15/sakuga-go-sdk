@@ -15,13 +15,14 @@ import (
 )
 
 var (
-	errInvalidPostOptions    = errors.New("invalid options - request limit must be between 1 and 100, page must be at least 1")
-	errInvalidTagOptions     = errors.New("invalid options - requires at least one tag argument")
-	errInvalidListTagOptions = errors.New("invalid tag options")
-	errInvalidTagType        = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
-	errInvalidCommentOptions = errors.New("invalid options - id must be set")
-	errInvalidArtistOptions  = errors.New("invalid options for artist request")
-	errInvalidWikiOptions    = errors.New("invalid options for wiki")
+	errInvalidPostOptions       = errors.New("invalid options - request limit must be between 1 and 100, page must be at least 1")
+	errInvalidTagOptions        = errors.New("invalid options - requires at least one tag argument")
+	errInvalidListTagOptions    = errors.New("invalid tag options")
+	errInvalidTagType           = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
+	errInvalidCommentOptions    = errors.New("invalid options - id must be set")
+	errInvalidArtistOptions     = errors.New("invalid options for artist request")
+	errInvalidWikiOptions       = errors.New("invalid options for wiki")
+	errInvalidNoteSearchOptions = errors.New("invalid options for note search")
 )
 
 func Fetch(url string) ([]byte, error) {
@@ -247,5 +248,51 @@ func CreateNoteListUrl(baseURL string, opts *models.NoteListOptions) (string, er
 	if opts.PostID != 0 {
 		finalURL += fmt.Sprintf("?post_id=%d", opts.PostID)
 	}
+	return finalURL, nil
+}
+
+func CreateNoteSearchUrl(baseURL string, opts *models.NoteSearchOptions) (string, error) {
+	finalURL, err := url.JoinPath(baseURL, "search.json")
+	if err != nil {
+		return "", err
+	}
+
+	if opts.Query == "" {
+		return "", errInvalidNoteSearchOptions
+	}
+
+	finalURL += "?query=" + opts.Query
+
+	return finalURL, nil
+}
+
+func CreateNoteHistoryUrl(baseURL string, opts *models.NoteHistorySearchOptions) (string, error) {
+	finalURL, err := url.JoinPath(baseURL, "history.json")
+	if err != nil {
+		return "", err
+	}
+
+	queryStringParams := make([]string, 0)
+
+	if opts.Limit != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("limit=%d", opts.Limit))
+	}
+
+	if opts.Page != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
+	}
+
+	if opts.PostID != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("post_id=%d", opts.PostID))
+	}
+
+	if opts.ID != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("id=%d", opts.ID))
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
+	}
+
 	return finalURL, nil
 }

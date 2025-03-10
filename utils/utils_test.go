@@ -553,3 +553,94 @@ func TestNotesListURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/note.json?post_id=251595")
 	})
 }
+
+func TestNotesSearchURLCreation(t *testing.T) {
+	t.Run("errors if no query is provided", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteSearchOptions{}
+
+		_, err := CreateNoteSearchUrl(baseURL, &options)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, errInvalidNoteSearchOptions)
+	})
+
+	t.Run("successful case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteSearchOptions{
+			Query: "fight",
+		}
+
+		result, err := CreateNoteSearchUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/search.json?query=fight")
+	})
+}
+
+func TestNotesHistoryURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteHistorySearchOptions{}
+
+		result, err := CreateNoteHistoryUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/history.json")
+	})
+
+	t.Run("limit", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteHistorySearchOptions{
+			Limit: 5,
+		}
+
+		result, err := CreateNoteHistoryUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/history.json?limit=5")
+	})
+
+	t.Run("page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteHistorySearchOptions{
+			Page: 1,
+		}
+
+		result, err := CreateNoteHistoryUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/history.json?page=1")
+	})
+
+	t.Run("post_id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteHistorySearchOptions{
+			PostID: 1273,
+		}
+
+		result, err := CreateNoteHistoryUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/history.json?post_id=1273")
+	})
+
+	t.Run("id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteHistorySearchOptions{
+			ID: 70,
+		}
+
+		result, err := CreateNoteHistoryUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/history.json?id=70")
+	})
+
+	t.Run("all query params", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/note"
+		options := models.NoteHistorySearchOptions{
+			Limit:  5,
+			ID:     4,
+			Page:   1,
+			PostID: 1273,
+		}
+
+		result, err := CreateNoteHistoryUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/note/history.json?limit=5&page=1&post_id=1273&id=4")
+	})
+}

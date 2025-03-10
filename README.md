@@ -2,11 +2,11 @@
 
 An unofficial go SDK for the [Sakugabooru API](https://sakugabooru.com/help/api)
 
-Currently supported api calls:
+Currently supported api routes:
 
-Posts - List
-Tags - List
-Tags - Related
+1. Posts - List
+1. Tags - List
+1. Tags - Related
 Artists - List
 Comments - Show
 Wiki - List
