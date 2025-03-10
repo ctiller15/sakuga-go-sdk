@@ -296,3 +296,23 @@ func CreateNoteHistoryUrl(baseURL string, opts *models.NoteHistorySearchOptions)
 
 	return finalURL, nil
 }
+
+func CreateUserSearchUrl(baseURL string, opts *models.UserSearchOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	queryStringParams := make([]string, 0)
+
+	if opts.ID != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("id=%d", opts.ID))
+	}
+
+	if opts.Name != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("name=%s", opts.Name))
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
+	}
+
+	return finalURL, nil
+}

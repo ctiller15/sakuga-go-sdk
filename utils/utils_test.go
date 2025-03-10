@@ -644,3 +644,36 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/note/history.json?limit=5&page=1&post_id=1273&id=4")
 	})
 }
+
+func TestUserSearchURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/user"
+		options := models.UserSearchOptions{}
+
+		result, err := CreateUserSearchUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/user.json")
+	})
+
+	t.Run("id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/user"
+		options := models.UserSearchOptions{
+			ID: 10,
+		}
+
+		result, err := CreateUserSearchUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/user.json?id=10")
+	})
+
+	t.Run("name", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/user"
+		options := models.UserSearchOptions{
+			Name: "s",
+		}
+
+		result, err := CreateUserSearchUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/user.json?name=s")
+	})
+}
