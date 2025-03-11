@@ -7,19 +7,17 @@ Currently supported api routes:
 1. Posts - List
 1. Tags - List
 1. Tags - Related
-Artists - List
-Comments - Show
-Wiki - List
-Wiki - Show - No access
-wiki - History - No access
-Notes - List
-Notes - Search
-Notes - History
-Users - Search
-Forum - List
-Pools - List Pools
-Pools - List Posts
-Favorites - List Users
+1. Artists - List
+1. Comments - Show
+1. Wiki - List
+1. Notes - List
+1. Notes - Search
+1. Notes - History
+1. Users - Search
+1. Forum - List
+1. Pools - List Pools
+1. Pools - List Posts
+1. Favorites - List Users
 
 Sakugabooru is a fantastic resource for animation. If you like their site, this SDK, (which relies entirely on their good graces), or animation in general it would be awesome if you [supported their patreon](https://www.patreon.com/Sakugabooru).
 

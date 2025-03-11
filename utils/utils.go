@@ -316,3 +316,13 @@ func CreateUserSearchUrl(baseURL string, opts *models.UserSearchOptions) (string
 
 	return finalURL, nil
 }
+
+func CreateForumListUrl(baseURL string, opts *models.ForumListOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	if opts.ParentID != 0 {
+		finalURL += fmt.Sprintf("?parent_id=%d", opts.ParentID)
+	}
+
+	return finalURL, nil
+}

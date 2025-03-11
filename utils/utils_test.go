@@ -677,3 +677,25 @@ func TestUserSearchURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/user.json?name=s")
 	})
 }
+
+func TestForumListURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/forum"
+		options := models.ForumListOptions{}
+
+		result, err := CreateForumListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/forum.json")
+	})
+
+	t.Run("parent_id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/forum"
+		options := models.ForumListOptions{
+			ParentID: 50,
+		}
+
+		result, err := CreateForumListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/forum.json?parent_id=50")
+	})
+}
