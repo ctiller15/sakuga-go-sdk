@@ -326,3 +326,23 @@ func CreateForumListUrl(baseURL string, opts *models.ForumListOptions) (string, 
 
 	return finalURL, nil
 }
+
+func CreatePoolListUrl(baseURL string, opts *models.PoolListOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	queryStringParams := make([]string, 0)
+
+	if opts.Query != "" {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("query=%s", opts.Query))
+	}
+
+	if opts.Page != 0 {
+		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
+	}
+
+	if len(queryStringParams) > 0 {
+		finalURL += "?" + strings.Join(queryStringParams, "&")
+	}
+
+	return finalURL, nil
+}

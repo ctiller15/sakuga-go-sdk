@@ -699,3 +699,48 @@ func TestForumListURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/forum.json?parent_id=50")
 	})
 }
+
+func TestPoolsListURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolListOptions{}
+
+		result, err := CreatePoolListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool.json")
+	})
+
+	t.Run("query", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolListOptions{
+			Query: "animation",
+		}
+
+		result, err := CreatePoolListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool.json?query=animation")
+	})
+
+	t.Run("page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolListOptions{
+			Page: 2,
+		}
+
+		result, err := CreatePoolListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool.json?page=2")
+	})
+
+	t.Run("all options", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolListOptions{
+			Query: "animation",
+			Page:  2,
+		}
+
+		result, err := CreatePoolListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool.json?query=animation&page=2")
+	})
+}
