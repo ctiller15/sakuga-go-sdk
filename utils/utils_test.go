@@ -744,3 +744,58 @@ func TestPoolsListURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/pool.json?query=animation&page=2")
 	})
 }
+
+func TestPoolsListPostsURLCreation(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolShowOptions{}
+
+		result, err := CreatePoolShowUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool/show.json")
+	})
+
+	t.Run("id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolShowOptions{
+			ID: 20,
+		}
+
+		result, err := CreatePoolShowUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool/show.json?id=20")
+	})
+
+	t.Run("page", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/pool"
+		options := models.PoolShowOptions{
+			Page: 20,
+		}
+
+		result, err := CreatePoolShowUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/pool/show.json?page=20")
+	})
+}
+
+func TestListUsersFavorites(t *testing.T) {
+	t.Run("base case", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/favorite/list_users"
+		options := models.FavoriteListUsersOptions{}
+
+		result, err := CreateFavoriteListUserURL(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/favorite/list_users.json")
+	})
+
+	t.Run("id", func(t *testing.T) {
+		baseURL := "https://sakugabooru.com/favorite/list_users"
+		options := models.FavoriteListUsersOptions{
+			ID: 20,
+		}
+
+		result, err := CreateFavoriteListUserURL(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/favorite/list_users.json?id=20")
+	})
+}

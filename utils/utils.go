@@ -346,3 +346,32 @@ func CreatePoolListUrl(baseURL string, opts *models.PoolListOptions) (string, er
 
 	return finalURL, nil
 }
+
+func CreatePoolShowUrl(baseURL string, opts *models.PoolShowOptions) (string, error) {
+	finalURL, err := url.JoinPath(baseURL, "show.json")
+	if err != nil {
+		return "", err
+	}
+
+	// No point in pairing ID with page.
+	// They are expected to be mutually exclusive
+	if opts.ID != 0 {
+		finalURL += fmt.Sprintf("?id=%d", opts.ID)
+	}
+
+	if opts.Page != 0 {
+		finalURL += fmt.Sprintf("?page=%d", opts.Page)
+	}
+
+	return finalURL, nil
+}
+
+func CreateFavoriteListUserURL(baseURL string, opts *models.FavoriteListUsersOptions) (string, error) {
+	finalURL := baseURL + ".json"
+
+	if opts.ID != 0 {
+		finalURL += fmt.Sprintf("?id=%d", opts.ID)
+	}
+
+	return finalURL, nil
+}
