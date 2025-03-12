@@ -64,8 +64,8 @@ type NoteHistoryAPIResultItem struct {
 }
 
 type NoteHistoryResponseItem struct {
-	CreatedAt string
-	UpdatedAt string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	CreatorID int
 	X         int
 	Y         int

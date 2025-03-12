@@ -567,6 +567,89 @@ var noteDataSearchResponse = []byte(`
 ]
 `)
 
+var noteDataHistoryResponse = []byte(`
+[
+  {
+    "created_at": "2021-09-23T22:46:00.458Z",
+    "updated_at": "2025-01-14T12:08:35.705Z",
+    "creator_id": 34147,
+    "x": 66,
+    "y": 230,
+    "width": 148,
+    "height": 148,
+    "is_active": true,
+    "post_id": 123229,
+    "body": "sp",
+    "version": 6
+  },
+  {
+    "created_at": "2021-09-23T22:46:00.458Z",
+    "updated_at": "2024-12-26T07:03:00.633Z",
+    "creator_id": 15559,
+    "x": 66,
+    "y": 230,
+    "width": 148,
+    "height": 148,
+    "is_active": true,
+    "post_id": 123229,
+    "body": "sp",
+    "version": 5
+  },
+  {
+    "created_at": "2021-09-23T22:46:00.458Z",
+    "updated_at": "2024-12-17T02:39:27.997Z",
+    "creator_id": 15559,
+    "x": 66,
+    "y": 230,
+    "width": 148,
+    "height": 148,
+    "is_active": true,
+    "post_id": 123229,
+    "body": "sp",
+    "version": 4
+  },
+  {
+    "created_at": "2021-09-23T22:46:00.458Z",
+    "updated_at": "2024-12-17T02:37:57.075Z",
+    "creator_id": 15559,
+    "x": 66,
+    "y": 230,
+    "width": 148,
+    "height": 148,
+    "is_active": true,
+    "post_id": 123229,
+    "body": "sp",
+    "version": 3
+  },
+  {
+    "created_at": "2021-09-23T22:46:00.458Z",
+    "updated_at": "2024-08-16T00:54:13.780Z",
+    "creator_id": 8283,
+    "x": 66,
+    "y": 230,
+    "width": 148,
+    "height": 148,
+    "is_active": true,
+    "post_id": 123229,
+    "body": "sp",
+    "version": 2
+  },
+  {
+    "created_at": "2021-09-23T22:46:00.458Z",
+    "updated_at": "2021-09-23T22:46:00.458Z",
+    "creator_id": 19493,
+    "x": 66,
+    "y": 230,
+    "width": 148,
+    "height": 148,
+    "is_active": true,
+    "post_id": 123229,
+    "body": "sp",
+    "version": 1
+  }
+]
+`)
+
 var userDataSearchResponse = []byte(`
 [
   {

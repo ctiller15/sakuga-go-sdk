@@ -124,3 +124,104 @@ func TestNoteSearch(t *testing.T) {
 		assert.Equal(t, expected, response)
 	})
 }
+
+func TestNoteHistory(t *testing.T) {
+	t.Run("base case, retrieve notes", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/note/history.json" {
+				w.WriteHeader(http.StatusOK)
+				w.Write(noteDataHistoryResponse)
+			}
+		}))
+
+		defer server.Close()
+
+		newAPI := NewAPI()
+		newAPI.SetHomeURL(server.URL)
+
+		opts := models.NoteHistorySearchOptions{}
+		response, err := newAPI.Notes.History(&opts)
+		assert.Nil(t, err)
+		expected := []models.NoteHistoryResponseItem{
+			{
+				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				UpdatedAt: time.Date(2025, time.January, 14, 12, 8, 35, 705000000, time.UTC),
+				CreatorID: 34147,
+				X:         66,
+				Y:         230,
+				Width:     148,
+				Height:    148,
+				IsActive:  true,
+				PostID:    123229,
+				Body:      "sp",
+				Version:   6,
+			},
+			{
+				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				UpdatedAt: time.Date(2024, time.December, 26, 7, 3, 0, 633000000, time.UTC),
+				CreatorID: 15559,
+				X:         66,
+				Y:         230,
+				Width:     148,
+				Height:    148,
+				IsActive:  true,
+				PostID:    123229,
+				Body:      "sp",
+				Version:   5,
+			},
+			{
+				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				UpdatedAt: time.Date(2024, time.December, 17, 2, 39, 27, 997000000, time.UTC),
+				CreatorID: 15559,
+				X:         66,
+				Y:         230,
+				Width:     148,
+				Height:    148,
+				IsActive:  true,
+				PostID:    123229,
+				Body:      "sp",
+				Version:   4,
+			},
+			{
+				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				UpdatedAt: time.Date(2024, time.December, 17, 2, 37, 57, 75000000, time.UTC),
+				CreatorID: 15559,
+				X:         66,
+				Y:         230,
+				Width:     148,
+				Height:    148,
+				IsActive:  true,
+				PostID:    123229,
+				Body:      "sp",
+				Version:   3,
+			},
+			{
+				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				UpdatedAt: time.Date(2024, time.August, 16, 0, 54, 13, 780000000, time.UTC),
+				CreatorID: 8283,
+				X:         66,
+				Y:         230,
+				Width:     148,
+				Height:    148,
+				IsActive:  true,
+				PostID:    123229,
+				Body:      "sp",
+				Version:   2,
+			},
+			{
+				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				UpdatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
+				CreatorID: 19493,
+				X:         66,
+				Y:         230,
+				Width:     148,
+				Height:    148,
+				IsActive:  true,
+				PostID:    123229,
+				Body:      "sp",
+				Version:   1,
+			},
+		}
+		assert.Equal(t, expected, response)
+	})
+}

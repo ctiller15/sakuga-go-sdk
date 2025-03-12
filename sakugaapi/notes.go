@@ -54,6 +54,40 @@ func mapNotesListAPIItemsToResponse(items []models.NoteListAPIResultItem) ([]mod
 	return response, nil
 }
 
+func mapNotesHistoryAPIItemsToResponse(items []models.NoteHistoryAPIResultItem) ([]models.NoteHistoryResponseItem, error) {
+	response := make([]models.NoteHistoryResponseItem, 0)
+
+	for _, item := range items {
+		createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		updatedAt, err := time.Parse(time.RFC3339, item.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		mappedResponseItem := models.NoteHistoryResponseItem{
+			CreatedAt: createdAt,
+			UpdatedAt: updatedAt,
+			CreatorID: item.CreatorID,
+			X:         item.X,
+			Y:         item.Y,
+			Width:     item.Width,
+			Height:    item.Height,
+			IsActive:  item.IsActive,
+			PostID:    item.PostID,
+			Body:      item.Body,
+			Version:   item.Version,
+		}
+
+		response = append(response, mappedResponseItem)
+	}
+
+	return response, nil
+}
+
 func (n *NotesAPI) List(opts *models.NoteListOptions) ([]models.NoteListResponseItem, error) {
 	url, err := utils.CreateNoteListUrl(n.URL, opts)
 	if err != nil {
@@ -94,6 +128,29 @@ func (n *NotesAPI) Search(opts *models.NoteSearchOptions) ([]models.NoteListResp
 	}
 
 	mappedItems, err := mapNotesListAPIItemsToResponse(notesListItems)
+	if err != nil {
+		return nil, err
+	}
+
+	return mappedItems, nil
+}
+
+func (n *NotesAPI) History(opts *models.NoteHistorySearchOptions) ([]models.NoteHistoryResponseItem, error) {
+	url, err := utils.CreateNoteHistoryUrl(n.URL, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := utils.Fetch(url)
+
+	notesListItems := make([]models.NoteHistoryAPIResultItem, 0)
+	err = json.Unmarshal(body, &notesListItems)
+
+	if err != nil {
+		return nil, err
+	}
+
+	mappedItems, err := mapNotesHistoryAPIItemsToResponse(notesListItems)
 	if err != nil {
 		return nil, err
 	}
