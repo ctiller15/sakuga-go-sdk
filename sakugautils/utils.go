@@ -1,3 +1,4 @@
+// package sakugautils contains helper methods for the sakugaapi
 package sakugautils
 
 import (

@@ -1,3 +1,4 @@
+// package sakugamodels contains response and options models for the api methods
 package sakugamodels
 
 const (

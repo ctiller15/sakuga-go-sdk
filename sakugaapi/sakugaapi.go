@@ -1,3 +1,4 @@
+// package sakugaapi contains the important API methods to initialize and use the API
 package sakugaapi
 
 const (
@@ -39,6 +40,7 @@ func NewAPI() *SakugaAPI {
 	return &newAPI
 }
 
+// Allows you to change the home URL to a new location
 func (s *SakugaAPI) SetHomeURL(newURL string) {
 	s.Posts = newPostsAPI(newURL)
 	s.Tags = newTagsAPI(newURL)
