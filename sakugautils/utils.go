@@ -28,7 +28,13 @@ var (
 
 func Fetch(url string) ([]byte, error) {
 	var body []byte
-	res, err := http.Get(url)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
