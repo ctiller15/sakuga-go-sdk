@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 // Struct that holds all the methods for posts
@@ -24,17 +24,17 @@ func newPostsAPI(baseURL string) *PostsAPI {
 // Can query with a style similar to the following:
 // https://sakugabooru.com/post.json?tags=order%3Arandom&limit=1
 
-func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListResponseResult, error) {
-	url, err := utils.CreatePostsListUrl(p.URL, opts)
+func (p *PostsAPI) List(opts *sakugamodels.PostsListOptions) ([]sakugamodels.PostListResponseResult, error) {
+	url, err := sakugautils.CreatePostsListUrl(p.URL, opts)
 	if err != nil {
 		return nil, err
 	}
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 	if err != nil {
 		return nil, err
 	}
 
-	postListItems := make([]models.PostListAPIResponseItem, 0)
+	postListItems := make([]sakugamodels.PostListAPIResponseItem, 0)
 	err = json.Unmarshal(body, &postListItems)
 
 	if err != nil {
@@ -45,11 +45,11 @@ func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListRespons
 	// work out options later.
 }
 
-func mapPostListAPIItemsToResponse(listItems []models.PostListAPIResponseItem) []models.PostListResponseResult {
-	postListResponseResults := make([]models.PostListResponseResult, 0)
+func mapPostListAPIItemsToResponse(listItems []sakugamodels.PostListAPIResponseItem) []sakugamodels.PostListResponseResult {
+	postListResponseResults := make([]sakugamodels.PostListResponseResult, 0)
 
 	for _, item := range listItems {
-		newResponseResult := models.PostListResponseResult{
+		newResponseResult := sakugamodels.PostListResponseResult{
 			ID:                  item.ID,
 			Tags:                item.Tags,
 			CreatedAt:           time.UnixMilli(item.CreatedAt),

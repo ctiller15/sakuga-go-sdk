@@ -1,4 +1,4 @@
-package models
+package sakugamodels
 
 import "time"
 
@@ -9,6 +9,7 @@ const (
 
 var WikiListOrderOptions = []string{WikiListOrderOptionTitle, WikiListOrderOptionDate}
 
+// The options struct corresponding to the Wiki.List method
 type WikiListOptions struct {
 	Order string // How you want pages to be ordered. Can be `title` or `date`.
 	Limit int    // The number of pages to retrieve
@@ -27,6 +28,7 @@ type WikiListAPIResultItem struct {
 	Version   int    `json:"version"`
 }
 
+// The response for the Wiki.List method
 type WikiListResponseItem struct {
 	ID        int
 	CreatedAt time.Time

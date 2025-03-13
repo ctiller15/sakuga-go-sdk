@@ -1,4 +1,4 @@
-package models
+package sakugamodels
 
 import "time"
 

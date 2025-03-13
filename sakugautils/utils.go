@@ -1,4 +1,4 @@
-package utils
+package sakugautils
 
 import (
 	"errors"
@@ -10,15 +10,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ctiller15/sakuga-go-sdk/constants"
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugaconstants"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 )
 
 var (
 	errInvalidPostOptions       = errors.New("invalid options - request limit must be between 1 and 100, page must be at least 1")
 	errInvalidTagOptions        = errors.New("invalid options - requires at least one tag argument")
 	errInvalidListTagOptions    = errors.New("invalid tag options")
-	errInvalidTagType           = fmt.Errorf("invalid tag type - must be one of %v", constants.VALID_TAG_TYPES)
+	errInvalidTagType           = fmt.Errorf("invalid tag type - must be one of %v", sakugaconstants.VALID_TAG_TYPES)
 	errInvalidCommentOptions    = errors.New("invalid options - id must be set")
 	errInvalidArtistOptions     = errors.New("invalid options for artist request")
 	errInvalidWikiOptions       = errors.New("invalid options for wiki")
@@ -56,7 +56,7 @@ func Fetch(url string) ([]byte, error) {
 	return body, nil
 }
 
-func CreatePostsListUrl(baseURL string, opts *models.PostsListOptions) (string, error) {
+func CreatePostsListUrl(baseURL string, opts *sakugamodels.PostsListOptions) (string, error) {
 	// 0 is the default value. If we see that we ignore that query entirely.
 	if opts.Limit != 0 && (opts.Limit > 100 || opts.Limit < 1) {
 		return "", errInvalidPostOptions
@@ -101,7 +101,7 @@ func CreatePostsListUrl(baseURL string, opts *models.PostsListOptions) (string, 
 	return finalURL, nil
 }
 
-func CreateListTagsUrl(baseURL string, opts *models.TagListOptions) (string, error) {
+func CreateListTagsUrl(baseURL string, opts *sakugamodels.TagListOptions) (string, error) {
 	finalURL := baseURL + ".json"
 
 	if opts.Limit != 0 && opts.Limit > 1000 {
@@ -110,7 +110,7 @@ func CreateListTagsUrl(baseURL string, opts *models.TagListOptions) (string, err
 
 	// TODO: investigate if random is supported for tag list
 	// TODO: add support for descending variations
-	if opts.Order != "" && !slices.Contains(models.TagListOrderOptions, opts.Order) {
+	if opts.Order != "" && !slices.Contains(sakugamodels.TagListOrderOptions, opts.Order) {
 		return "", errInvalidListTagOptions
 	}
 
@@ -152,7 +152,7 @@ func CreateListTagsUrl(baseURL string, opts *models.TagListOptions) (string, err
 	return finalURL, nil
 }
 
-func CreateRelatedTagsUrl(baseURL string, opts *models.TagRelatedOptions) (string, error) {
+func CreateRelatedTagsUrl(baseURL string, opts *sakugamodels.TagRelatedOptions) (string, error) {
 	if len(opts.Tags) == 0 {
 		return "", errInvalidTagOptions
 	}
@@ -167,7 +167,7 @@ func CreateRelatedTagsUrl(baseURL string, opts *models.TagRelatedOptions) (strin
 	finalURL += "?tags=" + tagsString
 
 	if opts.Type != "" {
-		if !slices.Contains(constants.VALID_TAG_TYPES, opts.Type) {
+		if !slices.Contains(sakugaconstants.VALID_TAG_TYPES, opts.Type) {
 			return "", errInvalidTagType
 		}
 
@@ -177,8 +177,8 @@ func CreateRelatedTagsUrl(baseURL string, opts *models.TagRelatedOptions) (strin
 	return finalURL, nil
 }
 
-func CreateArtistsListUrl(baseURL string, opts *models.ArtistListOptions) (string, error) {
-	if opts.Order != "" && !slices.Contains(models.ValidArtistListOrderOptions, opts.Order) {
+func CreateArtistsListUrl(baseURL string, opts *sakugamodels.ArtistListOptions) (string, error) {
+	if opts.Order != "" && !slices.Contains(sakugamodels.ValidArtistListOrderOptions, opts.Order) {
 		return "", errInvalidArtistOptions
 	}
 
@@ -205,7 +205,7 @@ func CreateArtistsListUrl(baseURL string, opts *models.ArtistListOptions) (strin
 	return finalURL, nil
 }
 
-func CreateCommentShowUrl(baseURL string, opts *models.CommentShowOptions) (string, error) {
+func CreateCommentShowUrl(baseURL string, opts *sakugamodels.CommentShowOptions) (string, error) {
 	if opts.ID == 0 {
 		return "", errInvalidCommentOptions
 	}
@@ -221,10 +221,10 @@ func CreateCommentShowUrl(baseURL string, opts *models.CommentShowOptions) (stri
 	return finalURL, nil
 }
 
-func CreateWikiListUrl(baseURL string, opts *models.WikiListOptions) (string, error) {
+func CreateWikiListUrl(baseURL string, opts *sakugamodels.WikiListOptions) (string, error) {
 	finalURL := baseURL + ".json"
 
-	if opts.Order != "" && !slices.Contains(models.WikiListOrderOptions, opts.Order) {
+	if opts.Order != "" && !slices.Contains(sakugamodels.WikiListOrderOptions, opts.Order) {
 		return "", errInvalidWikiOptions
 	}
 
@@ -254,7 +254,7 @@ func CreateWikiListUrl(baseURL string, opts *models.WikiListOptions) (string, er
 	return finalURL, nil
 }
 
-func CreateNoteListUrl(baseURL string, opts *models.NoteListOptions) (string, error) {
+func CreateNoteListUrl(baseURL string, opts *sakugamodels.NoteListOptions) (string, error) {
 	finalURL := baseURL + ".json"
 
 	if opts.PostID != 0 {
@@ -263,7 +263,7 @@ func CreateNoteListUrl(baseURL string, opts *models.NoteListOptions) (string, er
 	return finalURL, nil
 }
 
-func CreateNoteSearchUrl(baseURL string, opts *models.NoteSearchOptions) (string, error) {
+func CreateNoteSearchUrl(baseURL string, opts *sakugamodels.NoteSearchOptions) (string, error) {
 	finalURL, err := url.JoinPath(baseURL, "search.json")
 	if err != nil {
 		return "", err
@@ -278,7 +278,7 @@ func CreateNoteSearchUrl(baseURL string, opts *models.NoteSearchOptions) (string
 	return finalURL, nil
 }
 
-func CreateNoteHistoryUrl(baseURL string, opts *models.NoteHistorySearchOptions) (string, error) {
+func CreateNoteHistoryUrl(baseURL string, opts *sakugamodels.NoteHistorySearchOptions) (string, error) {
 	finalURL, err := url.JoinPath(baseURL, "history.json")
 	if err != nil {
 		return "", err
@@ -309,7 +309,7 @@ func CreateNoteHistoryUrl(baseURL string, opts *models.NoteHistorySearchOptions)
 	return finalURL, nil
 }
 
-func CreateUserSearchUrl(baseURL string, opts *models.UserSearchOptions) (string, error) {
+func CreateUserSearchUrl(baseURL string, opts *sakugamodels.UserSearchOptions) (string, error) {
 	finalURL := baseURL + ".json"
 
 	queryStringParams := make([]string, 0)
@@ -329,7 +329,7 @@ func CreateUserSearchUrl(baseURL string, opts *models.UserSearchOptions) (string
 	return finalURL, nil
 }
 
-func CreateForumListUrl(baseURL string, opts *models.ForumListOptions) (string, error) {
+func CreateForumListUrl(baseURL string, opts *sakugamodels.ForumListOptions) (string, error) {
 	finalURL := baseURL + ".json"
 
 	if opts.ParentID != 0 {
@@ -339,7 +339,7 @@ func CreateForumListUrl(baseURL string, opts *models.ForumListOptions) (string, 
 	return finalURL, nil
 }
 
-func CreatePoolListUrl(baseURL string, opts *models.PoolListOptions) (string, error) {
+func CreatePoolListUrl(baseURL string, opts *sakugamodels.PoolListOptions) (string, error) {
 	finalURL := baseURL + ".json"
 
 	queryStringParams := make([]string, 0)
@@ -359,7 +359,7 @@ func CreatePoolListUrl(baseURL string, opts *models.PoolListOptions) (string, er
 	return finalURL, nil
 }
 
-func CreatePoolShowUrl(baseURL string, opts *models.PoolShowOptions) (string, error) {
+func CreatePoolShowUrl(baseURL string, opts *sakugamodels.PoolShowOptions) (string, error) {
 	finalURL, err := url.JoinPath(baseURL, "show.json")
 	if err != nil {
 		return "", err
@@ -378,7 +378,7 @@ func CreatePoolShowUrl(baseURL string, opts *models.PoolShowOptions) (string, er
 	return finalURL, nil
 }
 
-func CreateFavoriteListUserURL(baseURL string, opts *models.FavoriteListUsersOptions) (string, error) {
+func CreateFavoriteListUserURL(baseURL string, opts *sakugamodels.FavoriteListUsersOptions) (string, error) {
 	finalURL, err := url.JoinPath(baseURL, "list_users.json")
 	if err != nil {
 		return "", err

@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,10 +23,10 @@ func TestUsersSearch(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.UserSearchOptions{}
+		opts := sakugamodels.UserSearchOptions{}
 		response, err := newAPI.Users.Search(&opts)
 		assert.Nil(t, err)
-		expected := []models.UserSearchAPIResponseItem{
+		expected := []sakugamodels.UserSearchAPIResponseItem{
 			{
 				Name: "sakurga56",
 				ID:   39722,

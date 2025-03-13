@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,10 +22,10 @@ func TestApiPostList(t *testing.T) {
 
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
-		opts := models.PostsListOptions{}
+		opts := sakugamodels.PostsListOptions{}
 		response, err := newAPI.Posts.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.PostListResponseResult{
+		expected := []sakugamodels.PostListResponseResult{
 			{
 				ID:                  216284,
 				Tags:                "artist_unknown correction kubo-san_wa_mob_wo_yurusanai production_materials",

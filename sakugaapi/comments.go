@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type CommentsAPI struct {
@@ -19,42 +19,42 @@ func newCommentsAPI(baseURL string) *CommentsAPI {
 	return &newAPI
 }
 
-func (c *CommentsAPI) Show(opts *models.CommentShowOptions) (models.CommentShowResponseItem, error) {
-	url, err := utils.CreateCommentShowUrl(c.URL, opts)
+func (c *CommentsAPI) Show(opts *sakugamodels.CommentShowOptions) (sakugamodels.CommentShowResponseItem, error) {
+	url, err := sakugautils.CreateCommentShowUrl(c.URL, opts)
 	if err != nil {
-		return models.CommentShowResponseItem{}, err
+		return sakugamodels.CommentShowResponseItem{}, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
 	if err != nil {
-		return models.CommentShowResponseItem{}, err
+		return sakugamodels.CommentShowResponseItem{}, err
 	}
 
-	commentShowItem := models.CommentShowAPIResultItem{}
+	commentShowItem := sakugamodels.CommentShowAPIResultItem{}
 	err = json.Unmarshal(body, &commentShowItem)
 
 	if err != nil {
-		return models.CommentShowResponseItem{}, err
+		return sakugamodels.CommentShowResponseItem{}, err
 	}
 
 	commentShowResponse, err := mapCommentShowAPIItemToResponse(commentShowItem)
 	if err != nil {
-		return models.CommentShowResponseItem{}, err
+		return sakugamodels.CommentShowResponseItem{}, err
 	}
 
 	return commentShowResponse, nil
 }
 
-func mapCommentShowAPIItemToResponse(item models.CommentShowAPIResultItem) (models.CommentShowResponseItem, error) {
+func mapCommentShowAPIItemToResponse(item sakugamodels.CommentShowAPIResultItem) (sakugamodels.CommentShowResponseItem, error) {
 	// Apparently the format is ISO 8601, but this is working for now so I'm happy.
 	//https://stackoverflow.com/questions/522251/whats-the-difference-between-iso-8601-and-rfc-3339-date-formats
 	parsedTime, err := time.Parse(time.RFC3339, item.CreatedAt)
 	if err != nil {
-		return models.CommentShowResponseItem{}, err
+		return sakugamodels.CommentShowResponseItem{}, err
 	}
 
-	return models.CommentShowResponseItem{
+	return sakugamodels.CommentShowResponseItem{
 		ID:        item.ID,
 		CreatedAt: parsedTime,
 		PostID:    item.PostID,

@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,10 +21,10 @@ func TestArtistAPIList(t *testing.T) {
 	t.Run("happy path, retrieve artists", func(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
-		opts := models.ArtistListOptions{}
+		opts := sakugamodels.ArtistListOptions{}
 		response, err := newAPI.Artists.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.ArtistListAPIResponseItem([]models.ArtistListAPIResponseItem{
+		expected := []sakugamodels.ArtistListAPIResponseItem([]sakugamodels.ArtistListAPIResponseItem{
 			{
 				ID:      1172,
 				Name:    "심땅",

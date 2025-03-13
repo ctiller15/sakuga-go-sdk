@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type TagsAPI struct {
@@ -19,15 +19,15 @@ func newTagsAPI(baseURL string) *TagsAPI {
 	return &newAPI
 }
 
-func (t *TagsAPI) Related(opts *models.TagRelatedOptions) (map[string][]models.RelatedTagResponse, error) {
-	url, err := utils.CreateRelatedTagsUrl(t.URL, opts)
+func (t *TagsAPI) Related(opts *sakugamodels.TagRelatedOptions) (map[string][]sakugamodels.RelatedTagResponse, error) {
+	url, err := sakugautils.CreateRelatedTagsUrl(t.URL, opts)
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 	if err != nil {
 		return nil, err
 	}
 
-	relatedTagAPIResponse := make(map[string][]models.RelatedTagResult)
+	relatedTagAPIResponse := make(map[string][]sakugamodels.RelatedTagResult)
 	err = json.Unmarshal(body, &relatedTagAPIResponse)
 
 	if err != nil {
@@ -41,16 +41,16 @@ func (t *TagsAPI) Related(opts *models.TagRelatedOptions) (map[string][]models.R
 	return mappedResponse, nil
 }
 
-func (t *TagsAPI) List(opts *models.TagListOptions) ([]models.TagListResponseResult, error) {
+func (t *TagsAPI) List(opts *sakugamodels.TagListOptions) ([]sakugamodels.TagListResponseResult, error) {
 	url := t.URL + ".json"
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
 	if err != nil {
 		return nil, err
 	}
 
-	tagListItems := make([]models.TagListAPIResponseItem, 0)
+	tagListItems := make([]sakugamodels.TagListAPIResponseItem, 0)
 	err = json.Unmarshal(body, &tagListItems)
 
 	if err != nil {
@@ -61,11 +61,11 @@ func (t *TagsAPI) List(opts *models.TagListOptions) ([]models.TagListResponseRes
 	// work out options later.
 }
 
-func mapTagRelatedAPIResultToResponse(tagAPIResult map[string][]models.RelatedTagResult) (map[string][]models.RelatedTagResponse, error) {
-	response := make(map[string][]models.RelatedTagResponse)
+func mapTagRelatedAPIResultToResponse(tagAPIResult map[string][]sakugamodels.RelatedTagResult) (map[string][]sakugamodels.RelatedTagResponse, error) {
+	response := make(map[string][]sakugamodels.RelatedTagResponse)
 
 	for k, v := range tagAPIResult {
-		newResult := make([]models.RelatedTagResponse, 0)
+		newResult := make([]sakugamodels.RelatedTagResponse, 0)
 
 		for _, tagResult := range v {
 			var ID int
@@ -82,7 +82,7 @@ func mapTagRelatedAPIResultToResponse(tagAPIResult map[string][]models.RelatedTa
 				ID = convID
 			}
 
-			newTagResponse := models.RelatedTagResponse{
+			newTagResponse := sakugamodels.RelatedTagResponse{
 				Name: tagResult[0].(string),
 				ID:   ID,
 			}
@@ -95,11 +95,11 @@ func mapTagRelatedAPIResultToResponse(tagAPIResult map[string][]models.RelatedTa
 	return response, nil
 }
 
-func mapTagListAPIItemsToResponse(listItems []models.TagListAPIResponseItem) []models.TagListResponseResult {
-	tagListResponseResults := make([]models.TagListResponseResult, 0)
+func mapTagListAPIItemsToResponse(listItems []sakugamodels.TagListAPIResponseItem) []sakugamodels.TagListResponseResult {
+	tagListResponseResults := make([]sakugamodels.TagListResponseResult, 0)
 
 	for _, item := range listItems {
-		newItem := models.TagListResponseResult(item)
+		newItem := sakugamodels.TagListResponseResult(item)
 		tagListResponseResults = append(tagListResponseResults, newItem)
 	}
 

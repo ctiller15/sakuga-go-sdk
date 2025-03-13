@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,12 +22,12 @@ func TestFavoritesListUsers(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.FavoriteListUsersOptions{
+		opts := sakugamodels.FavoriteListUsersOptions{
 			ID: 3,
 		}
 		response, err := newAPI.Favorites.ListUsers(&opts)
 		assert.Nil(t, err)
-		expected := models.FavoriteListUsersResponse{FavoritedUsers: []string{"Kawaki", "Zzdapao", "Nave", "Jupiterjavelin", "Moondoggie", "Dominic_Falisi", "Anitrix", "Petrychrores", "SandyWick", "mg13", "kaise2347", "m2", "Miyagi", "Ravennnn", "Spicygolf", "Fy3", "DanielSonic", "Stouze", "Mokuga", "Clon0s", "Nic2007", "martingrasoso", "Werdert", "swimhigh",
+		expected := sakugamodels.FavoriteListUsersResponse{FavoritedUsers: []string{"Kawaki", "Zzdapao", "Nave", "Jupiterjavelin", "Moondoggie", "Dominic_Falisi", "Anitrix", "Petrychrores", "SandyWick", "mg13", "kaise2347", "m2", "Miyagi", "Ravennnn", "Spicygolf", "Fy3", "DanielSonic", "Stouze", "Mokuga", "Clon0s", "Nic2007", "martingrasoso", "Werdert", "swimhigh",
 			"sakinreyy", "lvl2frog", "sakugayballs", "Brubthevideogameduck", "drake366", "mzamecki", "Miyuki", "goatt", "Welipe", "mybigheartforyou", "29dan5", "Jen", "akina432", "poipop_tiktok", "Martin_Caubet", "questionedmark", "zoba", "madèle", "Kakimasuka",
 			"_belo", "dragonkid21", "felipeherrera7211", "Shuun", "xXtenthdegree450Xx", "benorth", "Dingus_Art", "RyanHart<3", "Yusopp", "ZNoteTaku", "Mehaniki", "deshxun", "MetalliGuy2004", "marikuga", "cindy2465y", "Legite", "Bah", "kuu", "8stch", "Arial", "Tigreladd", "Passer", "Pascal_Wilson", "mango_21", "eddiecat", "kingberg", "kudokana", "BadAnimator2024",
 			"_Rojas_", "carlosg.", "EpiclyYYY", "poipop_", "Arita", "operationskuld", "TheMr.PrinceKnight", "Akajin", "Eggnogseller", "Sitrep", "mrgarci10", "Dfrank5547", "BigTesty", "inSpace", "ReverendClown", "estier", "Linex_anims", "zabs", "itsagreatdayout",

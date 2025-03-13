@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type NotesAPI struct {
@@ -19,8 +19,8 @@ func newNotesAPI(baseURL string) *NotesAPI {
 	return &newAPI
 }
 
-func mapNotesListAPIItemsToResponse(items []models.NoteListAPIResultItem) ([]models.NoteListResponseItem, error) {
-	response := make([]models.NoteListResponseItem, 0)
+func mapNotesListAPIItemsToResponse(items []sakugamodels.NoteListAPIResultItem) ([]sakugamodels.NoteListResponseItem, error) {
+	response := make([]sakugamodels.NoteListResponseItem, 0)
 
 	for _, item := range items {
 		createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
@@ -33,7 +33,7 @@ func mapNotesListAPIItemsToResponse(items []models.NoteListAPIResultItem) ([]mod
 			return nil, err
 		}
 
-		mappedResponseItem := models.NoteListResponseItem{
+		mappedResponseItem := sakugamodels.NoteListResponseItem{
 			ID:        item.ID,
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
@@ -54,8 +54,8 @@ func mapNotesListAPIItemsToResponse(items []models.NoteListAPIResultItem) ([]mod
 	return response, nil
 }
 
-func mapNotesHistoryAPIItemsToResponse(items []models.NoteHistoryAPIResultItem) ([]models.NoteHistoryResponseItem, error) {
-	response := make([]models.NoteHistoryResponseItem, 0)
+func mapNotesHistoryAPIItemsToResponse(items []sakugamodels.NoteHistoryAPIResultItem) ([]sakugamodels.NoteHistoryResponseItem, error) {
+	response := make([]sakugamodels.NoteHistoryResponseItem, 0)
 
 	for _, item := range items {
 		createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
@@ -68,7 +68,7 @@ func mapNotesHistoryAPIItemsToResponse(items []models.NoteHistoryAPIResultItem) 
 			return nil, err
 		}
 
-		mappedResponseItem := models.NoteHistoryResponseItem{
+		mappedResponseItem := sakugamodels.NoteHistoryResponseItem{
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
 			CreatorID: item.CreatorID,
@@ -88,15 +88,15 @@ func mapNotesHistoryAPIItemsToResponse(items []models.NoteHistoryAPIResultItem) 
 	return response, nil
 }
 
-func (n *NotesAPI) List(opts *models.NoteListOptions) ([]models.NoteListResponseItem, error) {
-	url, err := utils.CreateNoteListUrl(n.URL, opts)
+func (n *NotesAPI) List(opts *sakugamodels.NoteListOptions) ([]sakugamodels.NoteListResponseItem, error) {
+	url, err := sakugautils.CreateNoteListUrl(n.URL, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
-	notesListItems := make([]models.NoteListAPIResultItem, 0)
+	notesListItems := make([]sakugamodels.NoteListAPIResultItem, 0)
 	err = json.Unmarshal(body, &notesListItems)
 
 	if err != nil {
@@ -112,15 +112,15 @@ func (n *NotesAPI) List(opts *models.NoteListOptions) ([]models.NoteListResponse
 }
 
 // Allow to fuzzy search on notes
-func (n *NotesAPI) Search(opts *models.NoteSearchOptions) ([]models.NoteListResponseItem, error) {
-	url, err := utils.CreateNoteSearchUrl(n.URL, opts)
+func (n *NotesAPI) Search(opts *sakugamodels.NoteSearchOptions) ([]sakugamodels.NoteListResponseItem, error) {
+	url, err := sakugautils.CreateNoteSearchUrl(n.URL, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
-	notesListItems := make([]models.NoteListAPIResultItem, 0)
+	notesListItems := make([]sakugamodels.NoteListAPIResultItem, 0)
 	err = json.Unmarshal(body, &notesListItems)
 
 	if err != nil {
@@ -135,15 +135,15 @@ func (n *NotesAPI) Search(opts *models.NoteSearchOptions) ([]models.NoteListResp
 	return mappedItems, nil
 }
 
-func (n *NotesAPI) History(opts *models.NoteHistorySearchOptions) ([]models.NoteHistoryResponseItem, error) {
-	url, err := utils.CreateNoteHistoryUrl(n.URL, opts)
+func (n *NotesAPI) History(opts *sakugamodels.NoteHistorySearchOptions) ([]sakugamodels.NoteHistoryResponseItem, error) {
+	url, err := sakugautils.CreateNoteHistoryUrl(n.URL, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
-	notesListItems := make([]models.NoteHistoryAPIResultItem, 0)
+	notesListItems := make([]sakugamodels.NoteHistoryAPIResultItem, 0)
 	err = json.Unmarshal(body, &notesListItems)
 
 	if err != nil {

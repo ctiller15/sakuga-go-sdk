@@ -3,8 +3,8 @@ package sakugaapi
 import (
 	"encoding/json"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type ArtistsAPI struct {
@@ -18,16 +18,16 @@ func newArtistsAPI(baseURL string) *ArtistsAPI {
 	return &newAPI
 }
 
-func (a *ArtistsAPI) List(opts *models.ArtistListOptions) ([]models.ArtistListAPIResponseItem, error) {
+func (a *ArtistsAPI) List(opts *sakugamodels.ArtistListOptions) ([]sakugamodels.ArtistListAPIResponseItem, error) {
 	url := a.URL + ".json"
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
 	if err != nil {
 		return nil, err
 	}
 
-	artistListItems := make([]models.ArtistListAPIResultItem, 0)
+	artistListItems := make([]sakugamodels.ArtistListAPIResultItem, 0)
 	err = json.Unmarshal(body, &artistListItems)
 
 	if err != nil {
@@ -37,11 +37,11 @@ func (a *ArtistsAPI) List(opts *models.ArtistListOptions) ([]models.ArtistListAP
 	return mapArtistListAPIItemsToResponse(artistListItems), nil
 }
 
-func mapArtistListAPIItemsToResponse(listItems []models.ArtistListAPIResultItem) []models.ArtistListAPIResponseItem {
-	artistListResponseResults := make([]models.ArtistListAPIResponseItem, 0)
+func mapArtistListAPIItemsToResponse(listItems []sakugamodels.ArtistListAPIResultItem) []sakugamodels.ArtistListAPIResponseItem {
+	artistListResponseResults := make([]sakugamodels.ArtistListAPIResponseItem, 0)
 
 	for _, item := range listItems {
-		newItem := models.ArtistListAPIResponseItem(item)
+		newItem := sakugamodels.ArtistListAPIResponseItem(item)
 		artistListResponseResults = append(artistListResponseResults, newItem)
 	}
 

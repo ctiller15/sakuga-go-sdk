@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type PoolAPI struct {
@@ -19,8 +19,8 @@ func newPoolAPI(baseURL string) *PoolAPI {
 	return &newAPI
 }
 
-func mapPoolListAPIItemsToResponse(items []models.PoolListAPIResultItem) ([]models.PoolListResponseItem, error) {
-	response := make([]models.PoolListResponseItem, 0)
+func mapPoolListAPIItemsToResponse(items []sakugamodels.PoolListAPIResultItem) ([]sakugamodels.PoolListResponseItem, error) {
+	response := make([]sakugamodels.PoolListResponseItem, 0)
 
 	for _, item := range items {
 		createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
@@ -32,7 +32,7 @@ func mapPoolListAPIItemsToResponse(items []models.PoolListAPIResultItem) ([]mode
 		if err != nil {
 			return nil, err
 		}
-		mappedResponseItem := models.PoolListResponseItem{
+		mappedResponseItem := sakugamodels.PoolListResponseItem{
 			ID:          item.ID,
 			Name:        item.Name,
 			CreatedAt:   createdAt,
@@ -49,8 +49,8 @@ func mapPoolListAPIItemsToResponse(items []models.PoolListAPIResultItem) ([]mode
 	return response, nil
 }
 
-func mapPoolShowAPIItemsToResponse(items []models.PoolShowPostAPIResultItem) ([]models.PoolShowPostResponseItem, error) {
-	response := make([]models.PoolShowPostResponseItem, 0)
+func mapPoolShowAPIItemsToResponse(items []sakugamodels.PoolShowPostAPIResultItem) ([]sakugamodels.PoolShowPostResponseItem, error) {
+	response := make([]sakugamodels.PoolShowPostResponseItem, 0)
 
 	for _, item := range items {
 		createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
@@ -58,7 +58,7 @@ func mapPoolShowAPIItemsToResponse(items []models.PoolShowPostAPIResultItem) ([]
 			return nil, err
 		}
 
-		newItem := models.PoolShowPostResponseItem{
+		newItem := sakugamodels.PoolShowPostResponseItem{
 			ID:                  item.ID,
 			Tags:                item.Tags,
 			CreatedAt:           createdAt,
@@ -103,20 +103,20 @@ func mapPoolShowAPIItemsToResponse(items []models.PoolShowPostAPIResultItem) ([]
 	return response, nil
 }
 
-func mapPoolShowAPIItemToResponse(item models.PoolShowPostAPIResult) (models.PoolShowPostResponse, error) {
+func mapPoolShowAPIItemToResponse(item sakugamodels.PoolShowPostAPIResult) (sakugamodels.PoolShowPostResponse, error) {
 	createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
 	if err != nil {
-		return models.PoolShowPostResponse{}, err
+		return sakugamodels.PoolShowPostResponse{}, err
 	}
 
 	updatedAt, err := time.Parse(time.RFC3339, item.UpdatedAt)
 	if err != nil {
-		return models.PoolShowPostResponse{}, err
+		return sakugamodels.PoolShowPostResponse{}, err
 	}
 
 	posts, err := mapPoolShowAPIItemsToResponse(item.Posts)
 
-	response := models.PoolShowPostResponse{
+	response := sakugamodels.PoolShowPostResponse{
 		ID:          item.ID,
 		Name:        item.Name,
 		CreatedAt:   createdAt,
@@ -131,20 +131,20 @@ func mapPoolShowAPIItemToResponse(item models.PoolShowPostAPIResult) (models.Poo
 	return response, nil
 }
 
-func (p *PoolAPI) List(opts *models.PoolListOptions) ([]models.PoolListResponseItem, error) {
-	url, err := utils.CreatePoolListUrl(p.URL, opts)
+func (p *PoolAPI) List(opts *sakugamodels.PoolListOptions) ([]sakugamodels.PoolListResponseItem, error) {
+	url, err := sakugautils.CreatePoolListUrl(p.URL, opts)
 
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
 	if err != nil {
 		return nil, err
 	}
 
-	poolListItems := make([]models.PoolListAPIResultItem, 0)
+	poolListItems := make([]sakugamodels.PoolListAPIResultItem, 0)
 	err = json.Unmarshal(body, &poolListItems)
 
 	if err != nil {
@@ -159,29 +159,29 @@ func (p *PoolAPI) List(opts *models.PoolListOptions) ([]models.PoolListResponseI
 	return mappedResponse, nil
 }
 
-func (p *PoolAPI) Show(opts *models.PoolShowOptions) (models.PoolShowPostResponse, error) {
-	url, err := utils.CreatePoolShowUrl(p.URL, opts)
+func (p *PoolAPI) Show(opts *sakugamodels.PoolShowOptions) (sakugamodels.PoolShowPostResponse, error) {
+	url, err := sakugautils.CreatePoolShowUrl(p.URL, opts)
 
 	if err != nil {
-		return models.PoolShowPostResponse{}, err
+		return sakugamodels.PoolShowPostResponse{}, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
 	if err != nil {
-		return models.PoolShowPostResponse{}, err
+		return sakugamodels.PoolShowPostResponse{}, err
 	}
 
-	poolShowItem := models.PoolShowPostAPIResult{}
+	poolShowItem := sakugamodels.PoolShowPostAPIResult{}
 	err = json.Unmarshal(body, &poolShowItem)
 
 	if err != nil {
-		return models.PoolShowPostResponse{}, err
+		return sakugamodels.PoolShowPostResponse{}, err
 	}
 
 	mappedResponse, err := mapPoolShowAPIItemToResponse(poolShowItem)
 	if err != nil {
-		return models.PoolShowPostResponse{}, err
+		return sakugamodels.PoolShowPostResponse{}, err
 	}
 
 	return mappedResponse, nil

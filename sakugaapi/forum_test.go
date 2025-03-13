@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,10 +24,10 @@ func TestForumList(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.ForumListOptions{}
+		opts := sakugamodels.ForumListOptions{}
 		response, err := newAPI.Forum.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.ForumListResponseItem{
+		expected := []sakugamodels.ForumListResponseItem{
 			{
 				Body:      "If the website breaks or does something unexpected, post about it here.\r\n\r\nYou can also contact the booru Admin team via the following channels:\r\n\r\naers - http://sakuga.yshi.org/user/show/1 / https://twitter.com/aers00\r\nkvin - http://sakuga.yshi.org/user/show/2 / https://twitter.com/Yuyucow\r\nme - http://sakuga.yshi.org/user/show/4 / https://twitter.com/Kraker2k\r\n\r\nYou can also visit #sakuga on irc.rizon.net and leave a message there.\r\n\r\n",
 				Creator:   "Kraker2k",

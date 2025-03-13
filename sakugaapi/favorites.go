@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type FavoritesAPI struct {
@@ -20,27 +20,27 @@ func newFavoritesAPI(baseURL string) *FavoritesAPI {
 	return &newAPI
 }
 
-func mapFavoriteAPIResultToResponse(result models.FavoriteListUsersAPIResult) models.FavoriteListUsersResponse {
+func mapFavoriteAPIResultToResponse(result sakugamodels.FavoriteListUsersAPIResult) sakugamodels.FavoriteListUsersResponse {
 	parsedUsers := strings.Split(result.FavoritedUsers, ",")
-	response := models.FavoriteListUsersResponse{
+	response := sakugamodels.FavoriteListUsersResponse{
 		FavoritedUsers: parsedUsers,
 	}
 	return response
 }
 
-func (f *FavoritesAPI) ListUsers(opts *models.FavoriteListUsersOptions) (models.FavoriteListUsersResponse, error) {
-	url, err := utils.CreateFavoriteListUserURL(f.URL, opts)
+func (f *FavoritesAPI) ListUsers(opts *sakugamodels.FavoriteListUsersOptions) (sakugamodels.FavoriteListUsersResponse, error) {
+	url, err := sakugautils.CreateFavoriteListUserURL(f.URL, opts)
 	if err != nil {
-		return models.FavoriteListUsersResponse{}, err
+		return sakugamodels.FavoriteListUsersResponse{}, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
-	favoriteListAPIResult := models.FavoriteListUsersAPIResult{}
+	favoriteListAPIResult := sakugamodels.FavoriteListUsersAPIResult{}
 	err = json.Unmarshal(body, &favoriteListAPIResult)
 
 	if err != nil {
-		return models.FavoriteListUsersResponse{}, err
+		return sakugamodels.FavoriteListUsersResponse{}, err
 	}
 
 	mappedResponse := mapFavoriteAPIResultToResponse(favoriteListAPIResult)

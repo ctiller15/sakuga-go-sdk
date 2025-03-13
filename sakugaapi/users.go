@@ -3,8 +3,8 @@ package sakugaapi
 import (
 	"encoding/json"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type UsersAPI struct {
@@ -18,29 +18,29 @@ func newUsersAPI(baseURL string) *UsersAPI {
 	return &newAPI
 }
 
-func mapUserSearchAPIResultToResponse(items []models.UserSearchAPIResultItem) ([]models.UserSearchAPIResponseItem, error) {
-	userSearchAPIReponseResults := make([]models.UserSearchAPIResponseItem, 0)
+func mapUserSearchAPIResultToResponse(items []sakugamodels.UserSearchAPIResultItem) ([]sakugamodels.UserSearchAPIResponseItem, error) {
+	userSearchAPIReponseResults := make([]sakugamodels.UserSearchAPIResponseItem, 0)
 
 	for _, item := range items {
-		newItem := models.UserSearchAPIResponseItem(item)
+		newItem := sakugamodels.UserSearchAPIResponseItem(item)
 		userSearchAPIReponseResults = append(userSearchAPIReponseResults, newItem)
 	}
 
 	return userSearchAPIReponseResults, nil
 }
 
-func (u *UsersAPI) Search(opts *models.UserSearchOptions) ([]models.UserSearchAPIResponseItem, error) {
-	url, err := utils.CreateUserSearchUrl(u.URL, opts)
+func (u *UsersAPI) Search(opts *sakugamodels.UserSearchOptions) ([]sakugamodels.UserSearchAPIResponseItem, error) {
+	url, err := sakugautils.CreateUserSearchUrl(u.URL, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 	if err != nil {
 		return nil, err
 	}
 
-	userSearchAPIResult := make([]models.UserSearchAPIResultItem, 0)
+	userSearchAPIResult := make([]sakugamodels.UserSearchAPIResultItem, 0)
 	err = json.Unmarshal(body, &userSearchAPIResult)
 
 	if err != nil {

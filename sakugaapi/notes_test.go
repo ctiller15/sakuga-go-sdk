@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,10 +24,10 @@ func TestNoteList(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.NoteListOptions{}
+		opts := sakugamodels.NoteListOptions{}
 		response, err := newAPI.Notes.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.NoteListResponseItem{
+		expected := []sakugamodels.NoteListResponseItem{
 			{
 				ID:        270,
 				CreatedAt: time.Date(2024, time.February, 6, 22, 15, 57, 304000000, time.UTC),
@@ -75,12 +75,12 @@ func TestNoteSearch(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.NoteSearchOptions{
+		opts := sakugamodels.NoteSearchOptions{
 			Query: "fight",
 		}
 		response, err := newAPI.Notes.Search(&opts)
 		assert.Nil(t, err)
-		expected := []models.NoteListResponseItem{
+		expected := []sakugamodels.NoteListResponseItem{
 			{
 				ID: 4, CreatedAt: time.Date(2013, time.September, 3, 20, 29, 32, 200000000, time.UTC),
 				UpdatedAt: time.Date(2013, time.September, 3, 20, 29, 32, 200000000, time.UTC),
@@ -139,10 +139,10 @@ func TestNoteHistory(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.NoteHistorySearchOptions{}
+		opts := sakugamodels.NoteHistorySearchOptions{}
 		response, err := newAPI.Notes.History(&opts)
 		assert.Nil(t, err)
-		expected := []models.NoteHistoryResponseItem{
+		expected := []sakugamodels.NoteHistoryResponseItem{
 			{
 				CreatedAt: time.Date(2021, time.September, 23, 22, 46, 0, 458000000, time.UTC),
 				UpdatedAt: time.Date(2025, time.January, 14, 12, 8, 35, 705000000, time.UTC),

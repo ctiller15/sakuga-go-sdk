@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,12 +22,12 @@ func TestCommentAPIShow(t *testing.T) {
 	t.Run("happy path, retrieve a comment", func(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
-		opts := models.CommentShowOptions{
+		opts := sakugamodels.CommentShowOptions{
 			ID: 90003,
 		}
 		response, err := newAPI.Comments.Show(&opts)
 		assert.Nil(t, err)
-		expected := models.CommentShowResponseItem{
+		expected := sakugamodels.CommentShowResponseItem{
 			ID:        90003,
 			CreatedAt: time.Date(2023, time.December, 26, 20, 52, 33, 419000000, time.UTC),
 			PostID:    107257,

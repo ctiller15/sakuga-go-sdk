@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,10 +22,10 @@ func TestAPITagList(t *testing.T) {
 
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
-		opts := models.TagListOptions{}
+		opts := sakugamodels.TagListOptions{}
 		response, err := newAPI.Tags.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.TagListResponseResult{
+		expected := []sakugamodels.TagListResponseResult{
 			{
 				ID:        14391,
 				Name:      "",
@@ -116,12 +116,12 @@ func TestApiTagRelated(t *testing.T) {
 
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
-		opts := models.TagRelatedOptions{
+		opts := sakugamodels.TagRelatedOptions{
 			Tags: []string{"animated"},
 		}
 		response, err := newAPI.Tags.Related(&opts)
 		assert.Nil(t, err)
-		expected := map[string][]models.RelatedTagResponse{
+		expected := map[string][]sakugamodels.RelatedTagResponse{
 			"animated": {
 				{
 					Name: "animated",

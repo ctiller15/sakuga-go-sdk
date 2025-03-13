@@ -1,4 +1,4 @@
-package models
+package sakugamodels
 
 type TagRelatedOptions struct {
 	Tags []string // The tag names to query

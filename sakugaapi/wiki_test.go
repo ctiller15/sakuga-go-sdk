@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,10 +23,10 @@ func TestWikiList(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.WikiListOptions{}
+		opts := sakugamodels.WikiListOptions{}
 		response, err := newAPI.Wiki.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.WikiListResponseItem{
+		expected := []sakugamodels.WikiListResponseItem{
 			{
 				ID:        42,
 				CreatedAt: time.Date(2016, time.October, 5, 13, 30, 31, 967000000, time.UTC),

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type ForumAPI struct {
@@ -19,8 +19,8 @@ func newForumAPI(baseURL string) *ForumAPI {
 	return &newAPI
 }
 
-func mapForumListAPIResultToResponse(items []models.ForumListAPIResultItem) ([]models.ForumListResponseItem, error) {
-	forumListAPIResponseResults := make([]models.ForumListResponseItem, 0)
+func mapForumListAPIResultToResponse(items []sakugamodels.ForumListAPIResultItem) ([]sakugamodels.ForumListResponseItem, error) {
+	forumListAPIResponseResults := make([]sakugamodels.ForumListResponseItem, 0)
 
 	for _, item := range items {
 		updatedAt, err := time.Parse(time.RFC3339, item.UpdatedAt)
@@ -28,7 +28,7 @@ func mapForumListAPIResultToResponse(items []models.ForumListAPIResultItem) ([]m
 			return nil, err
 		}
 
-		newItem := models.ForumListResponseItem{
+		newItem := sakugamodels.ForumListResponseItem{
 			Body:      item.Body,
 			Creator:   item.Creator,
 			CreatorID: item.CreatorID,
@@ -45,18 +45,18 @@ func mapForumListAPIResultToResponse(items []models.ForumListAPIResultItem) ([]m
 	return forumListAPIResponseResults, nil
 }
 
-func (f *ForumAPI) List(opts *models.ForumListOptions) ([]models.ForumListResponseItem, error) {
-	url, err := utils.CreateForumListUrl(f.URL, opts)
+func (f *ForumAPI) List(opts *sakugamodels.ForumListOptions) ([]sakugamodels.ForumListResponseItem, error) {
+	url, err := sakugautils.CreateForumListUrl(f.URL, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 	if err != nil {
 		return nil, err
 	}
 
-	forumListAPIResult := make([]models.ForumListAPIResultItem, 0)
+	forumListAPIResult := make([]sakugamodels.ForumListAPIResultItem, 0)
 	err = json.Unmarshal(body, &forumListAPIResult)
 
 	if err != nil {

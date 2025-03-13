@@ -1,4 +1,4 @@
-package models
+package sakugamodels
 
 const (
 	ArtistListOrderDateOption = "date"
@@ -20,9 +20,6 @@ type ArtistListAPIResultItem struct {
 	GroupID int      `json:"group_id"`
 	Urls    []string `json:"urls"`
 }
-
-// TODO: figure out how to handle nullable values.
-// For integers/ids we can likely return a -1 value as an indicator
 
 type ArtistListAPIResponseItem struct {
 	ID      int

@@ -1,10 +1,10 @@
-package utils
+package sakugautils
 
 import (
 	"testing"
 
-	"github.com/ctiller15/sakuga-go-sdk/constants"
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugaconstants"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,7 +12,7 @@ func TestPostListURLCreation(t *testing.T) {
 	baseURL := "https://sakugabooru.com/post"
 
 	t.Run("empty case", func(t *testing.T) {
-		options := models.PostsListOptions{}
+		options := sakugamodels.PostsListOptions{}
 
 		result, err := CreatePostsListUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -21,7 +21,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("errors if limit is higher than 100", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 500,
 		}
 
@@ -31,7 +31,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("errors if limit is lower than 1", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: -10,
 		}
 
@@ -41,7 +41,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query - limit only", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 50,
 		}
 
@@ -53,7 +53,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("errors if page is lower than 1", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Page: -5,
 		}
 
@@ -63,7 +63,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query - page only", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Page: 1,
 		}
 
@@ -73,7 +73,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query - single tag only", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Tags: []string{"effects"},
 		}
 
@@ -83,7 +83,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query - order tag - random", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Random: true,
 		}
 
@@ -93,7 +93,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query - multiple tags", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Tags: []string{"effects", "fighting"},
 		}
 
@@ -103,7 +103,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query, limit and page", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 10,
 			Page:  5,
 		}
@@ -114,7 +114,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query, limit and tags - single", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 10,
 			Tags:  []string{"smoke"},
 		}
@@ -125,7 +125,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("successful query, limit and tags - multiple", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 10,
 			Tags:  []string{"smoke", "effects"},
 		}
@@ -136,7 +136,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("page and tags - single", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Page: 10,
 			Tags: []string{"smoke"},
 		}
@@ -147,7 +147,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("page and tags - multiple", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 10,
 			Tags:  []string{"smoke", "effects"},
 		}
@@ -158,7 +158,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("limit, page, and tags - single", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 10,
 			Page:  5,
 			Tags:  []string{"smoke"},
@@ -170,7 +170,7 @@ func TestPostListURLCreation(t *testing.T) {
 	})
 
 	t.Run("limit, page, and tags - multiple", func(t *testing.T) {
-		options := models.PostsListOptions{
+		options := sakugamodels.PostsListOptions{
 			Limit: 10,
 			Page:  5,
 			Tags:  []string{"smoke", "effects"},
@@ -185,7 +185,7 @@ func TestPostListURLCreation(t *testing.T) {
 func TestTagsListURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{}
+		options := sakugamodels.TagListOptions{}
 
 		response, err := CreateListTagsUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -194,7 +194,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("errors if limit is above 1000", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			Limit: 50000,
 		}
 
@@ -205,7 +205,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("errors if order is not date, count, or name", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			Order: "invalid",
 		}
 
@@ -216,7 +216,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("limit", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			Limit: 5,
 		}
 
@@ -227,7 +227,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			Page: 5,
 		}
 
@@ -238,8 +238,8 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("order", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
-			Order: models.TagListOrderOptionDate,
+		options := sakugamodels.TagListOptions{
+			Order: sakugamodels.TagListOrderOptionDate,
 		}
 
 		response, err := CreateListTagsUrl(baseURL, &options)
@@ -249,7 +249,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			ID: 25325,
 		}
 
@@ -260,7 +260,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("after_id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			AfterID: 25000,
 		}
 
@@ -271,7 +271,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("name", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			Name: "effects",
 		}
 
@@ -282,7 +282,7 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("name_pattern", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			NamePattern: "abcd",
 		}
 
@@ -293,10 +293,10 @@ func TestTagsListURLCreation(t *testing.T) {
 
 	t.Run("combination of all options", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagListOptions{
+		options := sakugamodels.TagListOptions{
 			Page:        1,
 			Limit:       5,
-			Order:       models.TagListOrderOptionDate,
+			Order:       sakugamodels.TagListOrderOptionDate,
 			ID:          26964,
 			AfterID:     25000,
 			Name:        "miyagawa",
@@ -312,7 +312,7 @@ func TestTagsListURLCreation(t *testing.T) {
 func TestRelatedTagsURLCreation(t *testing.T) {
 	t.Run("errors if no tag has been submitted", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagRelatedOptions{}
+		options := sakugamodels.TagRelatedOptions{}
 
 		_, err := CreateRelatedTagsUrl(baseURL, &options)
 		assert.NotNil(t, err)
@@ -321,7 +321,7 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 
 	t.Run("errors if an invalid tag type has been provided", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag"
-		options := models.TagRelatedOptions{
+		options := sakugamodels.TagRelatedOptions{
 			Tags: []string{"animated"},
 			Type: "invalid",
 		}
@@ -333,7 +333,7 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 
 	t.Run("creates a url with related tags", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag/"
-		options := models.TagRelatedOptions{
+		options := sakugamodels.TagRelatedOptions{
 			Tags: []string{"animated"},
 		}
 
@@ -345,7 +345,7 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 
 	t.Run("creates a url with multiple tags", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag/"
-		options := models.TagRelatedOptions{
+		options := sakugamodels.TagRelatedOptions{
 			Tags: []string{"animated", "fighting"},
 		}
 
@@ -357,9 +357,9 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 
 	t.Run("creates a url with multiple tags and a type", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/tag/"
-		options := models.TagRelatedOptions{
+		options := sakugamodels.TagRelatedOptions{
 			Tags: []string{"animated", "fighting"},
-			Type: constants.TagTypeArtist,
+			Type: sakugaconstants.TagTypeArtist,
 		}
 
 		result, err := CreateRelatedTagsUrl(baseURL, &options)
@@ -371,7 +371,7 @@ func TestRelatedTagsURLCreation(t *testing.T) {
 func TestArtistsListURLCreation(t *testing.T) {
 	t.Run("base case, generate url without options", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/artist"
-		options := models.ArtistListOptions{}
+		options := sakugamodels.ArtistListOptions{}
 
 		result, err := CreateArtistsListUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -381,7 +381,7 @@ func TestArtistsListURLCreation(t *testing.T) {
 
 	t.Run("errors if order is not date or name", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/artist"
-		options := models.ArtistListOptions{
+		options := sakugamodels.ArtistListOptions{
 			Order: "invalid",
 		}
 
@@ -392,7 +392,7 @@ func TestArtistsListURLCreation(t *testing.T) {
 
 	t.Run("name", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/artist"
-		options := models.ArtistListOptions{
+		options := sakugamodels.ArtistListOptions{
 			Name: "oda_eiichiro",
 		}
 
@@ -403,8 +403,8 @@ func TestArtistsListURLCreation(t *testing.T) {
 
 	t.Run("order", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/artist"
-		options := models.ArtistListOptions{
-			Order: models.ArtistListOrderNameOption,
+		options := sakugamodels.ArtistListOptions{
+			Order: sakugamodels.ArtistListOrderNameOption,
 		}
 
 		result, err := CreateArtistsListUrl(baseURL, &options)
@@ -414,7 +414,7 @@ func TestArtistsListURLCreation(t *testing.T) {
 
 	t.Run("page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/artist"
-		options := models.ArtistListOptions{
+		options := sakugamodels.ArtistListOptions{
 			Page: 5,
 		}
 
@@ -426,9 +426,9 @@ func TestArtistsListURLCreation(t *testing.T) {
 
 	t.Run("name, order, and page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/artist"
-		options := models.ArtistListOptions{
+		options := sakugamodels.ArtistListOptions{
 			Name:  "a",
-			Order: models.ArtistListOrderNameOption,
+			Order: sakugamodels.ArtistListOrderNameOption,
 			Page:  2,
 		}
 
@@ -441,7 +441,7 @@ func TestCommentShowURLCreation(t *testing.T) {
 	t.Run("Fails to create url if ID is not provided", func(t *testing.T) {
 		baseURL := "https://sakurabooru.com/comment/"
 
-		options := models.CommentShowOptions{}
+		options := sakugamodels.CommentShowOptions{}
 
 		_, err := CreateCommentShowUrl(baseURL, &options)
 		assert.NotNil(t, err)
@@ -451,7 +451,7 @@ func TestCommentShowURLCreation(t *testing.T) {
 	t.Run("Successfully creates url if ID is provided", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/comment/"
 
-		options := models.CommentShowOptions{
+		options := sakugamodels.CommentShowOptions{
 			ID: 90003,
 		}
 
@@ -465,7 +465,7 @@ func TestCommentShowURLCreation(t *testing.T) {
 func TestWikiListURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{}
+		options := sakugamodels.WikiListOptions{}
 
 		result, err := CreateWikiListUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -474,7 +474,7 @@ func TestWikiListURLCreation(t *testing.T) {
 
 	t.Run("order limited to title and date", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{
+		options := sakugamodels.WikiListOptions{
 			Order: "invalid",
 		}
 
@@ -485,8 +485,8 @@ func TestWikiListURLCreation(t *testing.T) {
 
 	t.Run("order", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{
-			Order: models.WikiListOrderOptionDate,
+		options := sakugamodels.WikiListOptions{
+			Order: sakugamodels.WikiListOrderOptionDate,
 		}
 
 		result, err := CreateWikiListUrl(baseURL, &options)
@@ -496,7 +496,7 @@ func TestWikiListURLCreation(t *testing.T) {
 
 	t.Run("limit", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{
+		options := sakugamodels.WikiListOptions{
 			Limit: 50,
 		}
 
@@ -507,7 +507,7 @@ func TestWikiListURLCreation(t *testing.T) {
 
 	t.Run("page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{
+		options := sakugamodels.WikiListOptions{
 			Page: 5,
 		}
 
@@ -518,7 +518,7 @@ func TestWikiListURLCreation(t *testing.T) {
 
 	t.Run("query", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{
+		options := sakugamodels.WikiListOptions{
 			Query: "Background",
 		}
 
@@ -529,8 +529,8 @@ func TestWikiListURLCreation(t *testing.T) {
 
 	t.Run("all parameters", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/wiki"
-		options := models.WikiListOptions{
-			Order: models.WikiListOrderOptionDate,
+		options := sakugamodels.WikiListOptions{
+			Order: sakugamodels.WikiListOrderOptionDate,
 			Limit: 2,
 			Page:  2,
 			Query: "Background",
@@ -545,7 +545,7 @@ func TestWikiListURLCreation(t *testing.T) {
 func TestNotesListURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteListOptions{}
+		options := sakugamodels.NoteListOptions{}
 
 		result, err := CreateNoteListUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -554,7 +554,7 @@ func TestNotesListURLCreation(t *testing.T) {
 
 	t.Run("postID", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteListOptions{
+		options := sakugamodels.NoteListOptions{
 			PostID: 251595,
 		}
 
@@ -567,7 +567,7 @@ func TestNotesListURLCreation(t *testing.T) {
 func TestNotesSearchURLCreation(t *testing.T) {
 	t.Run("errors if no query is provided", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteSearchOptions{}
+		options := sakugamodels.NoteSearchOptions{}
 
 		_, err := CreateNoteSearchUrl(baseURL, &options)
 		assert.NotNil(t, err)
@@ -576,7 +576,7 @@ func TestNotesSearchURLCreation(t *testing.T) {
 
 	t.Run("successful case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteSearchOptions{
+		options := sakugamodels.NoteSearchOptions{
 			Query: "fight",
 		}
 
@@ -589,7 +589,7 @@ func TestNotesSearchURLCreation(t *testing.T) {
 func TestNotesHistoryURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteHistorySearchOptions{}
+		options := sakugamodels.NoteHistorySearchOptions{}
 
 		result, err := CreateNoteHistoryUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -598,7 +598,7 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 
 	t.Run("limit", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteHistorySearchOptions{
+		options := sakugamodels.NoteHistorySearchOptions{
 			Limit: 5,
 		}
 
@@ -609,7 +609,7 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 
 	t.Run("page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteHistorySearchOptions{
+		options := sakugamodels.NoteHistorySearchOptions{
 			Page: 1,
 		}
 
@@ -620,7 +620,7 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 
 	t.Run("post_id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteHistorySearchOptions{
+		options := sakugamodels.NoteHistorySearchOptions{
 			PostID: 1273,
 		}
 
@@ -631,7 +631,7 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 
 	t.Run("id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteHistorySearchOptions{
+		options := sakugamodels.NoteHistorySearchOptions{
 			ID: 70,
 		}
 
@@ -642,7 +642,7 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 
 	t.Run("all query params", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/note"
-		options := models.NoteHistorySearchOptions{
+		options := sakugamodels.NoteHistorySearchOptions{
 			Limit:  5,
 			ID:     4,
 			Page:   1,
@@ -658,7 +658,7 @@ func TestNotesHistoryURLCreation(t *testing.T) {
 func TestUserSearchURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/user"
-		options := models.UserSearchOptions{}
+		options := sakugamodels.UserSearchOptions{}
 
 		result, err := CreateUserSearchUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -667,7 +667,7 @@ func TestUserSearchURLCreation(t *testing.T) {
 
 	t.Run("id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/user"
-		options := models.UserSearchOptions{
+		options := sakugamodels.UserSearchOptions{
 			ID: 10,
 		}
 
@@ -678,7 +678,7 @@ func TestUserSearchURLCreation(t *testing.T) {
 
 	t.Run("name", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/user"
-		options := models.UserSearchOptions{
+		options := sakugamodels.UserSearchOptions{
 			Name: "s",
 		}
 
@@ -691,7 +691,7 @@ func TestUserSearchURLCreation(t *testing.T) {
 func TestForumListURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/forum"
-		options := models.ForumListOptions{}
+		options := sakugamodels.ForumListOptions{}
 
 		result, err := CreateForumListUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -700,7 +700,7 @@ func TestForumListURLCreation(t *testing.T) {
 
 	t.Run("parent_id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/forum"
-		options := models.ForumListOptions{
+		options := sakugamodels.ForumListOptions{
 			ParentID: 50,
 		}
 
@@ -713,7 +713,7 @@ func TestForumListURLCreation(t *testing.T) {
 func TestPoolsListURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolListOptions{}
+		options := sakugamodels.PoolListOptions{}
 
 		result, err := CreatePoolListUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -722,7 +722,7 @@ func TestPoolsListURLCreation(t *testing.T) {
 
 	t.Run("query", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolListOptions{
+		options := sakugamodels.PoolListOptions{
 			Query: "animation",
 		}
 
@@ -733,7 +733,7 @@ func TestPoolsListURLCreation(t *testing.T) {
 
 	t.Run("page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolListOptions{
+		options := sakugamodels.PoolListOptions{
 			Page: 2,
 		}
 
@@ -744,7 +744,7 @@ func TestPoolsListURLCreation(t *testing.T) {
 
 	t.Run("all options", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolListOptions{
+		options := sakugamodels.PoolListOptions{
 			Query: "animation",
 			Page:  2,
 		}
@@ -758,7 +758,7 @@ func TestPoolsListURLCreation(t *testing.T) {
 func TestPoolsListPostsURLCreation(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolShowOptions{}
+		options := sakugamodels.PoolShowOptions{}
 
 		result, err := CreatePoolShowUrl(baseURL, &options)
 		assert.Nil(t, err)
@@ -767,7 +767,7 @@ func TestPoolsListPostsURLCreation(t *testing.T) {
 
 	t.Run("id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolShowOptions{
+		options := sakugamodels.PoolShowOptions{
 			ID: 20,
 		}
 
@@ -778,7 +778,7 @@ func TestPoolsListPostsURLCreation(t *testing.T) {
 
 	t.Run("page", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/pool"
-		options := models.PoolShowOptions{
+		options := sakugamodels.PoolShowOptions{
 			Page: 20,
 		}
 
@@ -791,7 +791,7 @@ func TestPoolsListPostsURLCreation(t *testing.T) {
 func TestListUsersFavorites(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/favorite"
-		options := models.FavoriteListUsersOptions{}
+		options := sakugamodels.FavoriteListUsersOptions{}
 
 		result, err := CreateFavoriteListUserURL(baseURL, &options)
 		assert.Nil(t, err)
@@ -800,7 +800,7 @@ func TestListUsersFavorites(t *testing.T) {
 
 	t.Run("id", func(t *testing.T) {
 		baseURL := "https://sakugabooru.com/favorite"
-		options := models.FavoriteListUsersOptions{
+		options := sakugamodels.FavoriteListUsersOptions{
 			ID: 20,
 		}
 

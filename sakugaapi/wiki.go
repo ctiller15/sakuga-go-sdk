@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
-	"github.com/ctiller15/sakuga-go-sdk/utils"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
+	"github.com/ctiller15/sakuga-go-sdk/sakugautils"
 )
 
 type WikiAPI struct {
@@ -19,8 +19,8 @@ func newWikiAPI(baseURL string) *WikiAPI {
 	return &newAPI
 }
 
-func mapWikiListAPIItemsToResponse(items []models.WikiListAPIResultItem) ([]models.WikiListResponseItem, error) {
-	response := make([]models.WikiListResponseItem, 0)
+func mapWikiListAPIItemsToResponse(items []sakugamodels.WikiListAPIResultItem) ([]sakugamodels.WikiListResponseItem, error) {
+	response := make([]sakugamodels.WikiListResponseItem, 0)
 
 	for _, item := range items {
 		createdAt, err := time.Parse(time.RFC3339, item.CreatedAt)
@@ -32,7 +32,7 @@ func mapWikiListAPIItemsToResponse(items []models.WikiListAPIResultItem) ([]mode
 		if err != nil {
 			return nil, err
 		}
-		mappedResponseItem := models.WikiListResponseItem{
+		mappedResponseItem := sakugamodels.WikiListResponseItem{
 			ID:        item.ID,
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
@@ -49,15 +49,15 @@ func mapWikiListAPIItemsToResponse(items []models.WikiListAPIResultItem) ([]mode
 	return response, nil
 }
 
-func (w *WikiAPI) List(opts *models.WikiListOptions) ([]models.WikiListResponseItem, error) {
-	url, err := utils.CreateWikiListUrl(w.URL, opts)
+func (w *WikiAPI) List(opts *sakugamodels.WikiListOptions) ([]sakugamodels.WikiListResponseItem, error) {
+	url, err := sakugautils.CreateWikiListUrl(w.URL, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := utils.Fetch(url)
+	body, err := sakugautils.Fetch(url)
 
-	wikiListItems := make([]models.WikiListAPIResultItem, 0)
+	wikiListItems := make([]sakugamodels.WikiListAPIResultItem, 0)
 	err = json.Unmarshal(body, &wikiListItems)
 
 	if err != nil {

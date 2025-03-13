@@ -1,4 +1,4 @@
-package constants
+package sakugaconstants
 
 const (
 	TagTypeGeneral   string = "general"

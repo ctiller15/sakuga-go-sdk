@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctiller15/sakuga-go-sdk/models"
+	"github.com/ctiller15/sakuga-go-sdk/sakugamodels"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,10 +23,10 @@ func TestPoolList(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.PoolListOptions{}
+		opts := sakugamodels.PoolListOptions{}
 		response, err := newAPI.Pools.List(&opts)
 		assert.Nil(t, err)
-		expected := []models.PoolListResponseItem{
+		expected := []sakugamodels.PoolListResponseItem{
 			{
 				ID: 257, Name: "PPURI", CreatedAt: time.Date(2024, time.October, 19, 17, 58, 29, 325000000, time.UTC), UpdatedAt: time.Date(2025, time.January, 5, 1, 31, 19, 717000000, time.UTC), UserID: 1028, IsPublic: true, PostCount: 300, Description: "All the animation works from the Korean studio."},
 			{
@@ -55,12 +55,12 @@ func TestPoolPostList(t *testing.T) {
 		newAPI := NewAPI()
 		newAPI.SetHomeURL(server.URL)
 
-		opts := models.PoolShowOptions{
+		opts := sakugamodels.PoolShowOptions{
 			ID: 215,
 		}
 		response, err := newAPI.Pools.Show(&opts)
 		assert.Nil(t, err)
-		expected := models.PoolShowPostResponse{
+		expected := sakugamodels.PoolShowPostResponse{
 			ID:          215,
 			Name:        "Stick_Figure_Animations",
 			CreatedAt:   time.Date(2023, time.June, 21, 19, 45, 51, 333000000, time.UTC),
@@ -69,7 +69,7 @@ func TestPoolPostList(t *testing.T) {
 			IsPublic:    false,
 			PostCount:   20,
 			Description: "Animations containing Stick Figures. Whether it'd fighting, dancing or mucking about, in general.",
-			Posts: []models.PoolShowPostResponseItem{
+			Posts: []sakugamodels.PoolShowPostResponseItem{
 				{
 					ID:                  22733,
 					Tags:                "animated fighting philips_lacanlale smears web western",
