@@ -25,7 +25,10 @@ func newPostsAPI(baseURL string) *PostsAPI {
 // https://sakugabooru.com/post.json?tags=order%3Arandom&limit=1
 
 func (p *PostsAPI) List(opts *models.PostsListOptions) ([]models.PostListResponseResult, error) {
-	url := p.URL + ".json"
+	url, err := utils.CreatePostsListUrl(p.URL, opts)
+	if err != nil {
+		return nil, err
+	}
 	body, err := utils.Fetch(url)
 	if err != nil {
 		return nil, err

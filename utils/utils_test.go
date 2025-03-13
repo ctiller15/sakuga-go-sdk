@@ -82,6 +82,16 @@ func TestPostListURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/post.json?tags=effects")
 	})
 
+	t.Run("successful query - order tag - random", func(t *testing.T) {
+		options := models.PostsListOptions{
+			Random: true,
+		}
+
+		result, err := CreatePostsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+		assert.Equal(t, result, "https://sakugabooru.com/post.json?tags=order:random")
+	})
+
 	t.Run("successful query - multiple tags", func(t *testing.T) {
 		options := models.PostsListOptions{
 			Tags: []string{"effects", "fighting"},

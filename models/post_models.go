@@ -3,9 +3,10 @@ package models
 import "time"
 
 type PostsListOptions struct {
-	Limit int      // How many posts you want to retrieve. Hard limit of 100 per request
-	Page  int      // The page number. It starts at 1.
-	Tags  []string // Tags to search for. Any tag combination will work, including meta-tags
+	Limit  int      // How many posts you want to retrieve. Hard limit of 100 per request
+	Page   int      // The page number. It starts at 1.
+	Tags   []string // Tags to search for. Any tag combination will work, including meta-tags
+	Random bool     // generates a query with the order:random tag.
 }
 
 type PostListAPIResponseItem struct {

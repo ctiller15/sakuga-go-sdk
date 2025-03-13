@@ -78,8 +78,20 @@ func CreatePostsListUrl(baseURL string, opts *models.PostsListOptions) (string, 
 		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
 	}
 
-	if len(opts.Tags) > 0 {
-		queryStringParams = append(queryStringParams, fmt.Sprintf("tags=%s", strings.Join(opts.Tags, " ")))
+	tags := ""
+	if opts.Random {
+		tags += "tags=order:random"
+	}
+
+	if len(opts.Tags) > 0 || opts.Random {
+		// In here if random is true, just add to existing tag string.
+		if opts.Random {
+			tags += fmt.Sprintf(" %s", strings.Join(opts.Tags, " "))
+			queryStringParams = append(queryStringParams, strings.TrimSpace(tags))
+		} else {
+			// Otherwise, fallback to current implementation.
+			queryStringParams = append(queryStringParams, fmt.Sprintf("tags=%s", strings.Join(opts.Tags, " ")))
+		}
 	}
 
 	if len(queryStringParams) > 0 {
