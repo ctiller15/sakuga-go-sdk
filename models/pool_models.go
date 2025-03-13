@@ -133,5 +133,5 @@ type PoolShowPostResponse struct {
 	IsPublic    bool
 	PostCount   int
 	Description string
-	Posts       []PoolShowPostResponse
+	Posts       []PoolShowPostResponseItem
 }
