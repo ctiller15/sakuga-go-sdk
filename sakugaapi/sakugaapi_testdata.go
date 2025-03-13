@@ -736,6 +736,7 @@ var userDataSearchResponse = []byte(`
 `)
 
 var forumDataListResponse = []byte(`
+[
   {
     "body": "If the website breaks or does something unexpected, post about it here.\r\n\r\nYou can also contact the booru Admin team via the following channels:\r\n\r\naers - http://sakuga.yshi.org/user/show/1 / https://twitter.com/aers00\r\nkvin - http://sakuga.yshi.org/user/show/2 / https://twitter.com/Yuyucow\r\nme - http://sakuga.yshi.org/user/show/4 / https://twitter.com/Kraker2k\r\n\r\nYou can also visit #sakuga on irc.rizon.net and leave a message there.\r\n\r\n",
     "creator": "Kraker2k",
@@ -796,6 +797,7 @@ var forumDataListResponse = []byte(`
     "updated_at": "2024-03-06T12:02:40.117Z",
     "pages": 1
   }
+	]
 `)
 
 var poolDataListResponse = []byte(`
