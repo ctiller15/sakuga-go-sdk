@@ -1,5 +1,7 @@
 # sakuga-go-sdk
 
+![ci status](https://github.com/ctiller15/sakuga-go-sdk/actions/workflows/ci.yml/badge.svg)
+
 An unofficial go SDK for the [Sakugabooru API](https://sakugabooru.com/help/api)
 
 Currently supported api routes:
