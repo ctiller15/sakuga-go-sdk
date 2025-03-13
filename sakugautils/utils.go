@@ -41,9 +41,14 @@ func Fetch(url string) ([]byte, error) {
 
 	defer res.Body.Close()
 
+	if res.StatusCode > 299 {
+		return nil, fmt.Errorf("response failed with status code: %d", res.StatusCode)
+	}
+
 	body, err = io.ReadAll(res.Body)
 
 	// Handle status codes.
+	// Available codes from the api docs
 	// 	Status Code 	Meaning
 	// 200 OK 	Request was successful
 	// 403 Forbidden 	Access denied
