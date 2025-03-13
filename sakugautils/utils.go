@@ -28,16 +28,27 @@ var (
 
 func Fetch(url string) ([]byte, error) {
 	var body []byte
-	res, err := http.Get(url)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
 	defer res.Body.Close()
 
+	if res.StatusCode > 299 {
+		return nil, fmt.Errorf("response failed with status code: %d", res.StatusCode)
+	}
+
 	body, err = io.ReadAll(res.Body)
 
 	// Handle status codes.
+	// Available codes from the api docs
 	// 	Status Code 	Meaning
 	// 200 OK 	Request was successful
 	// 403 Forbidden 	Access denied

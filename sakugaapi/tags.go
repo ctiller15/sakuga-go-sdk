@@ -21,6 +21,9 @@ func newTagsAPI(baseURL string) *TagsAPI {
 
 func (t *TagsAPI) Related(opts *sakugamodels.TagRelatedOptions) (map[string][]sakugamodels.RelatedTagResponse, error) {
 	url, err := sakugautils.CreateRelatedTagsUrl(t.URL, opts)
+	if err != nil {
+		return nil, err
+	}
 
 	body, err := sakugautils.Fetch(url)
 	if err != nil {
