@@ -95,6 +95,9 @@ func (n *NotesAPI) List(opts *sakugamodels.NoteListOptions) ([]sakugamodels.Note
 	}
 
 	body, err := sakugautils.Fetch(url)
+	if err != nil {
+		return nil, err
+	}
 
 	notesListItems := make([]sakugamodels.NoteListAPIResultItem, 0)
 	err = json.Unmarshal(body, &notesListItems)
@@ -119,6 +122,9 @@ func (n *NotesAPI) Search(opts *sakugamodels.NoteSearchOptions) ([]sakugamodels.
 	}
 
 	body, err := sakugautils.Fetch(url)
+	if err != nil {
+		return nil, err
+	}
 
 	notesListItems := make([]sakugamodels.NoteListAPIResultItem, 0)
 	err = json.Unmarshal(body, &notesListItems)
@@ -142,6 +148,9 @@ func (n *NotesAPI) History(opts *sakugamodels.NoteHistorySearchOptions) ([]sakug
 	}
 
 	body, err := sakugautils.Fetch(url)
+	if err != nil {
+		return nil, err
+	}
 
 	notesListItems := make([]sakugamodels.NoteHistoryAPIResultItem, 0)
 	err = json.Unmarshal(body, &notesListItems)

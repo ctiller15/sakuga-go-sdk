@@ -35,6 +35,9 @@ func (f *FavoritesAPI) ListUsers(opts *sakugamodels.FavoriteListUsersOptions) (s
 	}
 
 	body, err := sakugautils.Fetch(url)
+	if err != nil {
+		return sakugamodels.FavoriteListUsersResponse{}, err
+	}
 
 	favoriteListAPIResult := sakugamodels.FavoriteListUsersAPIResult{}
 	err = json.Unmarshal(body, &favoriteListAPIResult)

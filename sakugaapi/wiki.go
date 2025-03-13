@@ -56,6 +56,9 @@ func (w *WikiAPI) List(opts *sakugamodels.WikiListOptions) ([]sakugamodels.WikiL
 	}
 
 	body, err := sakugautils.Fetch(url)
+	if err != nil {
+		return nil, err
+	}
 
 	wikiListItems := make([]sakugamodels.WikiListAPIResultItem, 0)
 	err = json.Unmarshal(body, &wikiListItems)

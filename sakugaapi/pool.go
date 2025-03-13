@@ -115,6 +115,9 @@ func mapPoolShowAPIItemToResponse(item sakugamodels.PoolShowPostAPIResult) (saku
 	}
 
 	posts, err := mapPoolShowAPIItemsToResponse(item.Posts)
+	if err != nil {
+		return sakugamodels.PoolShowPostResponse{}, err
+	}
 
 	response := sakugamodels.PoolShowPostResponse{
 		ID:          item.ID,
