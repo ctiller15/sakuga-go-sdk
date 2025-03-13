@@ -11,6 +11,6 @@ type FavoriteListUsersAPIResult struct {
 	FavoritedUsers string `json:"favorited_users"`
 }
 
-type FavoriteListUsersAPIResponse struct {
+type FavoriteListUsersResponse struct {
 	FavoritedUsers []string
 }

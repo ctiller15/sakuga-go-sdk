@@ -379,7 +379,10 @@ func CreatePoolShowUrl(baseURL string, opts *models.PoolShowOptions) (string, er
 }
 
 func CreateFavoriteListUserURL(baseURL string, opts *models.FavoriteListUsersOptions) (string, error) {
-	finalURL := baseURL + ".json"
+	finalURL, err := url.JoinPath(baseURL, "list_users.json")
+	if err != nil {
+		return "", err
+	}
 
 	if opts.ID != 0 {
 		finalURL += fmt.Sprintf("?id=%d", opts.ID)

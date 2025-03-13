@@ -790,7 +790,7 @@ func TestPoolsListPostsURLCreation(t *testing.T) {
 
 func TestListUsersFavorites(t *testing.T) {
 	t.Run("base case", func(t *testing.T) {
-		baseURL := "https://sakugabooru.com/favorite/list_users"
+		baseURL := "https://sakugabooru.com/favorite"
 		options := models.FavoriteListUsersOptions{}
 
 		result, err := CreateFavoriteListUserURL(baseURL, &options)
@@ -799,7 +799,7 @@ func TestListUsersFavorites(t *testing.T) {
 	})
 
 	t.Run("id", func(t *testing.T) {
-		baseURL := "https://sakugabooru.com/favorite/list_users"
+		baseURL := "https://sakugabooru.com/favorite"
 		options := models.FavoriteListUsersOptions{
 			ID: 20,
 		}
