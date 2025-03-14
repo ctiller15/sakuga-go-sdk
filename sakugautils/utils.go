@@ -104,7 +104,7 @@ func CreatePostsListUrl(baseURL string, opts *sakugamodels.PostsListOptions) (st
 	tags += strings.Join(tagsOptions, " ")
 
 	if len(opts.Tags) > 0 {
-		tags += fmt.Sprintf("%s", strings.Join(opts.Tags, " "))
+		tags += strings.Join(opts.Tags, " ")
 	}
 
 	if len(tagsOptions)+len(opts.Tags) > 0 {
