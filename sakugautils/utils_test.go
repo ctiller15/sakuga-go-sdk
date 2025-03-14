@@ -20,6 +20,17 @@ func TestPostListURLCreation(t *testing.T) {
 		assert.Equal(t, result, "https://sakugabooru.com/post.json")
 	})
 
+	t.Run("fetches via ID", func(t *testing.T) {
+		options := sakugamodels.PostsListOptions{
+			ID: 277788,
+		}
+
+		result, err := CreatePostsListUrl(baseURL, &options)
+		assert.Nil(t, err)
+
+		assert.Equal(t, result, "https://sakugabooru.com/post.json?tags=id:277788")
+	})
+
 	t.Run("errors if limit is higher than 100", func(t *testing.T) {
 		options := sakugamodels.PostsListOptions{
 			Limit: 500,
