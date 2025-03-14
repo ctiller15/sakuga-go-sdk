@@ -90,20 +90,25 @@ func CreatePostsListUrl(baseURL string, opts *sakugamodels.PostsListOptions) (st
 		queryStringParams = append(queryStringParams, fmt.Sprintf("page=%d", opts.Page))
 	}
 
-	tags := ""
-	if opts.Random {
-		tags += "tags=order:random"
+	tags := "tags="
+	tagsOptions := make([]string, 0)
+
+	if opts.ID != 0 {
+		tagsOptions = append(tagsOptions, fmt.Sprintf("id:%d", opts.ID))
 	}
 
-	if len(opts.Tags) > 0 || opts.Random {
-		// In here if random is true, just add to existing tag string.
-		if opts.Random {
-			tags += fmt.Sprintf(" %s", strings.Join(opts.Tags, " "))
-			queryStringParams = append(queryStringParams, strings.TrimSpace(tags))
-		} else {
-			// Otherwise, fallback to current implementation.
-			queryStringParams = append(queryStringParams, fmt.Sprintf("tags=%s", strings.Join(opts.Tags, " ")))
-		}
+	if opts.Random {
+		tagsOptions = append(tagsOptions, "order:random")
+	}
+
+	tags += strings.Join(tagsOptions, " ")
+
+	if len(opts.Tags) > 0 {
+		tags += strings.Join(opts.Tags, " ")
+	}
+
+	if len(tagsOptions)+len(opts.Tags) > 0 {
+		queryStringParams = append(queryStringParams, strings.TrimSpace(tags))
 	}
 
 	if len(queryStringParams) > 0 {

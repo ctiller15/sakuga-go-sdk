@@ -20,10 +20,9 @@ func newPostsAPI(baseURL string) *PostsAPI {
 	return &newAPI
 }
 
-// TODO: Add a "random" endpoint.
-// Can query with a style similar to the following:
-// https://sakugabooru.com/post.json?tags=order%3Arandom&limit=1
+// Can fetch by ID with the following: https://www.sakugabooru.com/post.json?tags=id:277788
 
+// Fetches posts from sakugabooru
 func (p *PostsAPI) List(opts *sakugamodels.PostsListOptions) ([]sakugamodels.PostListResponseResult, error) {
 	url, err := sakugautils.CreatePostsListUrl(p.URL, opts)
 	if err != nil {

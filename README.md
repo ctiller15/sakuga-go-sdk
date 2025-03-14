@@ -9,20 +9,56 @@ An unofficial go SDK for the [Sakugabooru API](https://sakugabooru.com/help/api)
 go get github.com/ctiller15/sakuga-go-sdk@latest
 ```
 
+## Quickstart
+```go
+api := sakugaapi.NewAPI()
+
+opts := sakugamodels.PostsListOptions{
+	Limit: 10,
+}
+apiResult, err := api.Posts.List(&opts)
+
+if err != nil {
+	log.Fatal(err)
+}
+// Do something with the data
+```
+
 ## Usage
 ```go
-	api := sakugaapi.NewAPI()
+// Get a random video with each request
+api := sakugaapi.NewAPI()
 
-	opts := sakugamodels.PostsListOptions{
-		Limit: 10,
-	}
-	apiResult, err := api.Posts.List(&opts)
+opts := sakugamodels.PostListOptions{
+	Limit: 1,
+	Random: True,
+	Tags: []string{"fighting"}
+}
 
-	if err != nil {
-		log.Fatal(err)
-	}
-    // Do something with the data
+apiResult, err := api.Posts.List(&opts)
+
+if err != nil {
+	log.Fatal(err)
+}
+
+videoURL := apiResult[0].fileURL
 ```
+
+## Contributing
+
+### Clone the repository
+```bash
+git clone https://github.com/ctiller15/sakuga-go-sdk.git
+cd sakuga-go-sdk
+```
+
+### Run the tests
+```bash
+go test ./...
+```
+
+### Submit a pull request
+To contribute, fork the repo and open a pull request to `main`
 
 Currently supported api routes:
 

@@ -3,10 +3,11 @@ package sakugamodels
 import "time"
 
 type PostsListOptions struct {
+	ID     int      // The ID of the post.
 	Limit  int      // How many posts you want to retrieve. Hard limit of 100 per request
 	Page   int      // The page number. It starts at 1.
 	Tags   []string // Tags to search for. Any tag combination will work, including meta-tags
-	Random bool     // generates a query with the order:random tag.
+	Random bool     // Forces results to show in random order
 }
 
 type PostListAPIResponseItem struct {
