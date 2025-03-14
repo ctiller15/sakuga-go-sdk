@@ -44,6 +44,22 @@ if err != nil {
 videoURL := apiResult[0].fileURL
 ```
 
+## Contributing
+
+### Clone the repository
+```bash
+git clone https://github.com/ctiller15/sakuga-go-sdk.git
+cd sakuga-go-sdk
+```
+
+### Run the tests
+```bash
+go test ./...
+```
+
+### Submit a pull request
+To contribute, fork the repo and open a pull request to `main`
+
 Currently supported api routes:
 
 1. Posts - List
